@@ -1,9 +1,8 @@
 # Tasks
 
-- [ ] Foundation
-- [ ] Authentication
-- [ ] Dashboard
-- [ ] Projects
-- [ ] Inventory
-- [ ] Computer Vision
-- [ ] Digital Twin
+- [x] Foundation
+- [x] Authentication
+- [x] Dashboard
+- [x] Inventory
+- [x] Computer Vision
+- [x] Digital Twin

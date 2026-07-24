@@ -1,0 +1,9 @@
+.next/
+node_modules/
+dist/
+build/
+coverage/
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/

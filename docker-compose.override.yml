@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  api:
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./apps/api:/app
+    environment:
+      - ENVIRONMENT=development
+      - LOG_LEVEL=debug
+
+  web:
+    command: pnpm --filter web dev
+    volumes:
+      - .:/app
+      - /app/apps/web/.next
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
