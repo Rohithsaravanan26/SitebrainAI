@@ -14,14 +14,19 @@ import {
   HelpCircle,
   Folder,
   Users,
-  CheckCircle2,
+  Settings,
+  Clock,
+  UploadCloud,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Project, RFI, ProjectDocument } from '@sitebrain/types';
-import { StatusBadge, type StatusVariant } from '@/components/dashboard/shared/StatusBadge';
+import { StatusBadge } from '@/components/dashboard/shared/StatusBadge';
 import { RfisTable } from '@/components/projects/RfisTable';
 import { CreateRfiModal } from '@/components/projects/CreateRfiModal';
-import { DocumentsTable } from '@/components/projects/DocumentsTable';
+import { ProjectTimeline } from '@/components/projects/ProjectTimeline';
+import { ProjectMembersTable } from '@/components/projects/ProjectMembersTable';
+import { ProjectUploadWidget } from '@/components/projects/ProjectUploadWidget';
+import { ProjectSettingsForm } from '@/components/projects/ProjectSettingsForm';
 
 // ─── Initial Seed Data for Detail Page Fallback ───
 const DEFAULT_PROJECT: Project = {
@@ -122,20 +127,7 @@ const INITIAL_DOCS: ProjectDocument[] = [
   },
 ];
 
-const TEAM_MEMBERS = [
-  { name: 'M. Vance', role: 'Project Manager', trade: 'Management', phone: '0412 889 012' },
-  { name: 'J. Chen', role: 'Site Engineer', trade: 'Structural Civils', phone: '0421 990 123' },
-  { name: 'S. Okafor', role: 'BIM Coordinator', trade: 'BIM / VDC', phone: '0433 112 234' },
-  {
-    name: 'T. Nakamura',
-    role: 'Site Supervisor',
-    trade: 'Concrete & Rebar',
-    phone: '0444 223 345',
-  },
-  { name: 'D. Kowalski', role: 'Leading Hand', trade: 'Formwork', phone: '0455 334 456' },
-];
-
-type DetailTab = 'overview' | 'rfis' | 'documents' | 'team';
+type DetailTab = 'overview' | 'timeline' | 'members' | 'documents' | 'settings';
 
 function fmtCurrency(n: number) {
   return new Intl.NumberFormat('en-AU', {
@@ -165,6 +157,14 @@ export default function ProjectDetailPage() {
 
   const handleRfiCreated = (newRfi: RFI) => {
     setRfis((prev) => [newRfi, ...prev]);
+  };
+
+  const handleDocumentUploaded = (newDoc: ProjectDocument) => {
+    setDocuments((prev) => [newDoc, ...prev]);
+  };
+
+  const handleProjectSaved = (updated: Project) => {
+    setProject(updated);
   };
 
   return (
@@ -233,23 +233,24 @@ export default function ProjectDetailPage() {
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-0 border-b border-slate-200 dark:border-slate-800">
+        <div className="flex items-center gap-0 border-b border-slate-200 dark:border-slate-800 overflow-x-auto">
           {[
             { id: 'overview', label: 'Overview', icon: <Folder className="h-3.5 w-3.5" /> },
             {
-              id: 'rfis',
-              label: `RFIs (${rfis.length})`,
-              icon: <HelpCircle className="h-3.5 w-3.5" />,
+              id: 'timeline',
+              label: 'Timeline & Milestones',
+              icon: <Clock className="h-3.5 w-3.5" />,
             },
+            { id: 'members', label: 'Team Members', icon: <Users className="h-3.5 w-3.5" /> },
             {
               id: 'documents',
-              label: `Documents (${documents.length})`,
+              label: `Documents & Uploads (${documents.length})`,
               icon: <FileText className="h-3.5 w-3.5" />,
             },
             {
-              id: 'team',
-              label: `Project Team (${TEAM_MEMBERS.length})`,
-              icon: <Users className="h-3.5 w-3.5" />,
+              id: 'settings',
+              label: 'Settings & Budget',
+              icon: <Settings className="h-3.5 w-3.5" />,
             },
           ].map((tab) => (
             <button
@@ -311,14 +312,8 @@ export default function ProjectDetailPage() {
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 font-mono">
                     Recent Requests for Information
                   </h3>
-                  <button
-                    onClick={() => setActiveTab('rfis')}
-                    className="text-[11px] font-mono text-orange-600 hover:text-orange-700"
-                  >
-                    View All RFIs →
-                  </button>
                 </div>
-                <RfisTable rfis={rfis.slice(0, 3)} />
+                <RfisTable rfis={rfis} />
               </div>
             </div>
 
@@ -327,14 +322,15 @@ export default function ProjectDetailPage() {
               {/* Progress Summary Card */}
               <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-sm p-4 space-y-3">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 font-mono">
-                  Package Progress
+                  Package Progress Breakdown
                 </h3>
-                <div className="space-y-2">
+                <div className="space-y-2.5">
                   {[
                     { name: 'Foundation & Footings', progress: 100 },
                     { name: 'Podium Structure L1–L3', progress: 100 },
                     { name: 'Tower Concrete L4–L14', progress: 72 },
                     { name: 'MEP Services Riser', progress: 31 },
+                    { name: 'Curtain Wall Facade', progress: 10 },
                   ].map((p) => (
                     <div key={p.name}>
                       <div className="flex justify-between text-[11px] font-mono mb-1">
@@ -359,63 +355,24 @@ export default function ProjectDetailPage() {
           </div>
         )}
 
-        {/* Tab 2: RFIs */}
-        {activeTab === 'rfis' && (
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <p className="text-xs font-mono text-slate-500">
-                Total {rfis.length} RFIs · {rfis.filter((r) => r.status === 'OPEN').length} Open
-              </p>
-              <button
-                onClick={() => setIsRfiModalOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold bg-orange-700 hover:bg-orange-600 text-white rounded-sm"
-              >
-                <Plus className="h-3.5 w-3.5" /> Submit RFI
-              </button>
-            </div>
-            <RfisTable rfis={rfis} />
-          </div>
+        {/* Tab 2: Timeline */}
+        {activeTab === 'timeline' && <ProjectTimeline />}
+
+        {/* Tab 3: Members */}
+        {activeTab === 'members' && <ProjectMembersTable />}
+
+        {/* Tab 4: Documents & Uploads */}
+        {activeTab === 'documents' && (
+          <ProjectUploadWidget
+            projectId={project.id}
+            documents={documents}
+            onDocumentUploaded={handleDocumentUploaded}
+          />
         )}
 
-        {/* Tab 3: Documents */}
-        {activeTab === 'documents' && <DocumentsTable documents={documents} />}
-
-        {/* Tab 4: Team */}
-        {activeTab === 'team' && (
-          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-sm overflow-hidden">
-            <table className="w-full text-xs">
-              <thead className="bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
-                <tr>
-                  <th className="text-left px-4 py-2.5 font-bold uppercase tracking-wider text-slate-500 text-[10px]">
-                    Member
-                  </th>
-                  <th className="text-left px-3 py-2.5 font-bold uppercase tracking-wider text-slate-500 text-[10px]">
-                    Role
-                  </th>
-                  <th className="text-left px-3 py-2.5 font-bold uppercase tracking-wider text-slate-500 text-[10px]">
-                    Trade / Speciality
-                  </th>
-                  <th className="text-right px-4 py-2.5 font-bold uppercase tracking-wider text-slate-500 text-[10px]">
-                    Contact
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-                {TEAM_MEMBERS.map((m) => (
-                  <tr key={m.name} className="hover:bg-slate-50 dark:hover:bg-slate-800/30">
-                    <td className="px-4 py-2.5 font-medium text-slate-900 dark:text-slate-100">
-                      {m.name}
-                    </td>
-                    <td className="px-3 py-2.5 text-slate-600 dark:text-slate-400 font-mono">
-                      {m.role}
-                    </td>
-                    <td className="px-3 py-2.5 text-slate-500">{m.trade}</td>
-                    <td className="px-4 py-2.5 text-right font-mono text-slate-500">{m.phone}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        {/* Tab 5: Settings */}
+        {activeTab === 'settings' && (
+          <ProjectSettingsForm project={project} onSaved={handleProjectSaved} />
         )}
       </div>
     </>

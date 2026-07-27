@@ -53,6 +53,7 @@ export interface VerifyEmailRequest {
 export type ProjectStatus = 'PLANNING' | 'ACTIVE' | 'ON_HOLD' | 'COMPLETED';
 export type RfiStatus = 'OPEN' | 'IN_REVIEW' | 'ANSWERED' | 'CLOSED';
 export type RfiPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+export type MilestoneStatus = 'COMPLETED' | 'IN_PROGRESS' | 'UPCOMING';
 
 export interface Project {
   id: string;
@@ -66,10 +67,31 @@ export interface Project {
   budget: number;
   projectManagerId?: string;
   projectManagerName?: string;
+  createdById?: string;
   progressPercent: number;
   openRfiCount: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ProjectMember {
+  id: string;
+  projectId: string;
+  userId: string;
+  fullName: string;
+  email: string;
+  role: UserRole;
+  roleInProject: string;
+  createdAt: string;
+}
+
+export interface ProjectMilestone {
+  id: string;
+  projectId: string;
+  name: string;
+  targetDate: string;
+  status: MilestoneStatus;
+  progressPercent: number;
 }
 
 export interface RFI {
@@ -100,6 +122,14 @@ export interface ProjectDocument {
   uploadedById?: string;
   uploadedByName?: string;
   createdAt: string;
+}
+
+export interface PaginatedProjectsResponse {
+  items: Project[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }
 
 // -------------------------------------------------------------

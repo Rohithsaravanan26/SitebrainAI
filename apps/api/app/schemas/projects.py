@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
-from app.models.projects import ProjectStatus, RfiStatus, RfiPriority
+from app.models.projects import ProjectStatus, RfiStatus, RfiPriority, MilestoneStatus
+from app.models.auth import UserRole
 
 class ProjectBase(BaseModel):
     code: str = Field(..., min_length=2, max_length=50)
@@ -24,15 +25,59 @@ class ProjectUpdate(BaseModel):
     status: Optional[ProjectStatus] = None
     budget: Optional[float] = None
     progress_percent: Optional[float] = None
+    start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
 
 class ProjectResponse(ProjectBase):
     id: str
     project_manager_id: Optional[str] = None
     project_manager_name: Optional[str] = None
+    created_by_id: Optional[str] = None
     open_rfi_count: int = 0
     created_at: datetime
     updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class PaginatedProjectsResponse(BaseModel):
+    items: List[ProjectResponse]
+    total: int
+    page: int
+    limit: int
+    total_pages: int
+
+class ProjectMemberCreate(BaseModel):
+    user_id: str
+    role_in_project: str = "Member"
+
+class ProjectMemberResponse(BaseModel):
+    id: str
+    project_id: str
+    user_id: str
+    full_name: str
+    email: str
+    role: UserRole
+    role_in_project: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class ProjectMilestoneCreate(BaseModel):
+    name: str = Field(..., min_length=2, max_length=255)
+    target_date: datetime
+    status: MilestoneStatus = MilestoneStatus.UPCOMING
+    progress_percent: float = Field(0.0, ge=0, le=100)
+
+class ProjectMilestoneResponse(BaseModel):
+    id: str
+    project_id: str
+    name: str
+    target_date: datetime
+    status: MilestoneStatus
+    progress_percent: float
+    created_at: datetime
 
     class Config:
         from_attributes = True

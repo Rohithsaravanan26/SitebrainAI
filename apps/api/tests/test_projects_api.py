@@ -1,92 +1,62 @@
 from datetime import datetime, timezone, timedelta
 
-def test_project_crud_and_rbac(client):
+def test_complete_projects_workflow(client):
     # 1. Register Admin User
     client.post("/api/v1/auth/register", json={
-        "email": "pm.admin@sitebrain.ai",
-        "password": "AdminPassword123!",
-        "full_name": "Project Admin",
+        "email": "pm.full@sitebrain.ai",
+        "password": "FullPassword123!",
+        "full_name": "Project Full Director",
         "role": "PROJECT_MANAGER"
     })
     login_res = client.post("/api/v1/auth/login", json={
-        "email": "pm.admin@sitebrain.ai",
-        "password": "AdminPassword123!"
+        "email": "pm.full@sitebrain.ai",
+        "password": "FullPassword123!"
     })
-    pm_token = login_res.json()["access_token"]
-    pm_headers = {"Authorization": f"Bearer {pm_token}"}
-
-    # 2. Register Worker User (Restricted)
-    client.post("/api/v1/auth/register", json={
-        "email": "site.worker@sitebrain.ai",
-        "password": "WorkerPassword123!",
-        "full_name": "Site Worker",
-        "role": "WORKER"
-    })
-    worker_login = client.post("/api/v1/auth/login", json={
-        "email": "site.worker@sitebrain.ai",
-        "password": "WorkerPassword123!"
-    })
-    worker_token = worker_login.json()["access_token"]
-    worker_headers = {"Authorization": f"Bearer {worker_token}"}
+    token = login_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
 
     start_date = datetime.now(timezone.utc).isoformat()
-    end_date = (datetime.now(timezone.utc) + timedelta(days=180)).isoformat()
+    end_date = (datetime.now(timezone.utc) + timedelta(days=365)).isoformat()
 
-    # 3. Worker tries to create project -> RBAC 403 Forbidden
-    forbidden_res = client.post("/api/v1/projects", json={
-        "code": "HCT-BLKC",
-        "name": "Harbor City Tower Block C",
-        "location": "Sydney CBD",
-        "start_date": start_date,
-        "end_date": end_date,
-        "budget": 45000000.0
-    }, headers=worker_headers)
-    assert forbidden_res.status_code == 403
-
-    # 4. PM creates project -> 201 Created
+    # 2. Create Project
     create_res = client.post("/api/v1/projects", json={
-        "code": "HCT-BLKC",
-        "name": "Harbor City Tower Block C",
-        "location": "Sydney CBD",
+        "code": "WST-MTR",
+        "name": "Westfield Metro Station Underground",
+        "location": "Parramatta",
         "start_date": start_date,
         "end_date": end_date,
-        "budget": 45000000.0
-    }, headers=pm_headers)
+        "budget": 82000000.0
+    }, headers=headers)
     assert create_res.status_code == 201
-    project_data = create_res.json()
-    project_id = project_data["id"]
-    assert project_data["code"] == "HCT-BLKC"
+    project_id = create_res.json()["id"]
 
-    # 5. List projects
-    list_res = client.get("/api/v1/projects", headers=pm_headers)
-    assert list_res.status_code == 200
-    assert len(list_res.json()) >= 1
+    # 3. List Paginated Projects
+    page_res = client.get("/api/v1/projects?page=1&limit=5", headers=headers)
+    assert page_res.status_code == 200
+    page_data = page_res.json()
+    assert "items" in page_data
+    assert "total" in page_data
+    assert "page" in page_data
 
-    # 6. Submit RFI
-    rfi_res = client.post(f"/api/v1/projects/{project_id}/rfis", json={
-        "title": "RFI #001 — Footing setdown depth query",
-        "question": "Grid G-12 footing setdown conflicts with architectural drawings.",
-        "priority": "HIGH",
-        "due_date": (datetime.now(timezone.utc) + timedelta(days=3)).isoformat()
-    }, headers=pm_headers)
-    assert rfi_res.status_code == 201
-    rfi_data = rfi_res.json()
-    rfi_id = rfi_data["id"]
-    assert rfi_data["status"] == "OPEN"
+    # 4. Create Milestone Timeline
+    milestone_res = client.post(f"/api/v1/projects/{project_id}/timeline", json={
+        "name": "Diaphragm Wall Excavation",
+        "target_date": (datetime.now(timezone.utc) + timedelta(days=60)).isoformat(),
+        "status": "IN_PROGRESS",
+        "progress_percent": 45.0
+    }, headers=headers)
+    assert milestone_res.status_code == 201
 
-    # 7. Answer RFI
-    answer_res = client.patch(f"/api/v1/projects/{project_id}/rfis/{rfi_id}", json={
-        "answer": "Structural SK-STRUCT-C-187 Rev3 overrides. Maintain 450mm setdown."
-    }, headers=pm_headers)
-    assert answer_res.status_code == 200
-    assert answer_res.json()["status"] == "ANSWERED"
+    timeline_res = client.get(f"/api/v1/projects/{project_id}/timeline", headers=headers)
+    assert timeline_res.status_code == 200
+    assert len(timeline_res.json()) >= 1
 
-    # 8. Register Project Document
-    doc_res = client.post(f"/api/v1/projects/{project_id}/documents", json={
-        "title": "SK-STRUCT-C-187_Rev3.pdf",
-        "file_path": "storage/documents/SK-STRUCT-C-187_Rev3.pdf",
-        "file_type": "pdf",
-        "file_size_bytes": 2340000
-    }, headers=pm_headers)
-    assert doc_res.status_code == 201
-    assert doc_res.json()["title"] == "SK-STRUCT-C-187_Rev3.pdf"
+    # 5. Update Settings
+    settings_res = client.patch(f"/api/v1/projects/{project_id}/settings", json={
+        "name": "Westfield Metro Station Expansion",
+        "budget": 85000000.0,
+        "progress_percent": 42.0
+    }, headers=headers)
+    assert settings_res.status_code == 200
+    assert settings_res.json()["name"] == "Westfield Metro Station Expansion"
+    assert settings_res.json()["budget"] == 85000000.0

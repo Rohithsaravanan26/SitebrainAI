@@ -5,14 +5,15 @@ import {
   FolderKanban,
   Search,
   Plus,
-  Filter,
   DollarSign,
   AlertTriangle,
   BarChart3,
   Building2,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import type { Project, ProjectStatus } from '@sitebrain/types';
+import type { Project, PaginatedProjectsResponse } from '@sitebrain/types';
 import { ProjectCard } from '@/components/projects/ProjectCard';
 import { CreateProjectModal } from '@/components/projects/CreateProjectModal';
 
@@ -101,16 +102,27 @@ export default function ProjectsPage() {
   const [loading, setLoading] = React.useState(true);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [statusFilter, setStatusFilter] = React.useState<string>('ALL');
+  const [page, setPage] = React.useState(1);
+  const [totalPages, setTotalPages] = React.useState(1);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-  // Fetch projects from API with fallback
+  // Fetch paginated projects from API with fallback
   React.useEffect(() => {
     async function loadProjects() {
+      setLoading(true);
       try {
-        const res = await fetch('/api/v1/projects');
+        const queryParams = new URLSearchParams({
+          page: String(page),
+          limit: '9',
+        });
+        if (statusFilter !== 'ALL') queryParams.set('status_filter', statusFilter);
+        if (searchQuery.trim()) queryParams.set('search', searchQuery.trim());
+
+        const res = await fetch(`/api/v1/projects?${queryParams.toString()}`);
         if (res.ok) {
-          const data = await res.json();
-          setProjects(data.length > 0 ? data : SEED_PROJECTS);
+          const data: PaginatedProjectsResponse = await res.json();
+          setProjects(data.items.length > 0 ? data.items : SEED_PROJECTS);
+          setTotalPages(data.totalPages || 1);
         } else {
           setProjects(SEED_PROJECTS);
         }
@@ -121,7 +133,7 @@ export default function ProjectsPage() {
       }
     }
     loadProjects();
-  }, []);
+  }, [page, statusFilter, searchQuery]);
 
   const handleProjectCreated = (newProject: Project) => {
     setProjects((prev) => [newProject, ...prev]);
@@ -225,7 +237,10 @@ export default function ProjectsPage() {
               type="text"
               placeholder="Search by project name, code (e.g. HCT-C), or site location..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setPage(1);
+              }}
               className="flex-1 bg-transparent text-xs text-slate-800 dark:text-slate-200 placeholder:text-slate-400 focus:outline-none"
             />
           </div>
@@ -234,7 +249,10 @@ export default function ProjectsPage() {
             {(['ALL', 'ACTIVE', 'PLANNING', 'ON_HOLD', 'COMPLETED'] as const).map((st) => (
               <button
                 key={st}
-                onClick={() => setStatusFilter(st)}
+                onClick={() => {
+                  setStatusFilter(st);
+                  setPage(1);
+                }}
                 className={cn(
                   'px-2.5 py-1 text-[11px] font-mono rounded-sm transition-colors uppercase',
                   statusFilter === st
@@ -273,6 +291,31 @@ export default function ProjectsPage() {
             {filteredProjects.map((p) => (
               <ProjectCard key={p.id} project={p} />
             ))}
+          </div>
+        )}
+
+        {/* Pagination Bar */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between border-t border-slate-200 dark:border-slate-800 pt-3">
+            <p className="text-xs font-mono text-slate-500">
+              Page {page} of {totalPages}
+            </p>
+            <div className="flex items-center gap-1">
+              <button
+                disabled={page <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                className="p-1.5 rounded-sm border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <button
+                disabled={page >= totalPages}
+                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                className="p-1.5 rounded-sm border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 disabled:opacity-40"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         )}
       </div>
