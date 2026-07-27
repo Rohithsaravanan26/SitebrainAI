@@ -48,7 +48,9 @@ export default function LoginPage() {
           <div className="bg-orange-600 p-1 rounded-sm">
             <HardHat className="h-4 w-4 text-white" />
           </div>
-          <span className="font-bold tracking-wider uppercase text-xs text-white">SiteBrain AI</span>
+          <span className="font-bold tracking-wider uppercase text-xs text-white">
+            SiteBrain AI
+          </span>
         </div>
         <span className="font-mono text-[11px] text-slate-400">Enterprise Authentication</span>
       </HeaderNav>
@@ -64,7 +66,7 @@ export default function LoginPage() {
               Enter your enterprise credentials to access project telemetry & field operations.
             </CardDescription>
           </CardHeader>
-          
+
           <form onSubmit={handleSubmit}>
             <CardContent className="space-y-4">
               {error && (
@@ -120,7 +122,10 @@ export default function LoginPage() {
               </Button>
               <div className="text-center text-xs text-slate-500">
                 Don't have an enterprise account?{' '}
-                <Link href="/auth/register" className="text-orange-600 hover:underline font-semibold">
+                <Link
+                  href="/auth/register"
+                  className="text-orange-600 hover:underline font-semibold"
+                >
                   Register Account
                 </Link>
               </div>

@@ -9,15 +9,19 @@ interface LowStockAlertsWidgetProps {
 
 export const LowStockAlertsWidget: React.FC<LowStockAlertsWidgetProps> = ({ onReorder }) => {
   const criticalItems = INVENTORY_ITEMS.filter((i) => i.currentStock <= i.reorderLevel * 0.5);
-  const lowItems      = INVENTORY_ITEMS.filter((i) => i.currentStock > i.reorderLevel * 0.5 && i.currentStock <= i.reorderLevel);
-  const allAlerts     = [...criticalItems, ...lowItems];
+  const lowItems = INVENTORY_ITEMS.filter(
+    (i) => i.currentStock > i.reorderLevel * 0.5 && i.currentStock <= i.reorderLevel
+  );
+  const allAlerts = [...criticalItems, ...lowItems];
 
   if (allAlerts.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-slate-500">
         <AlertTriangle className="h-8 w-8 mb-2 text-slate-300 dark:text-slate-700" />
         <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">No stock alerts</p>
-        <p className="text-xs text-slate-400 font-mono mt-0.5">All materials are above reorder threshold</p>
+        <p className="text-xs text-slate-400 font-mono mt-0.5">
+          All materials are above reorder threshold
+        </p>
       </div>
     );
   }
@@ -27,14 +31,20 @@ export const LowStockAlertsWidget: React.FC<LowStockAlertsWidgetProps> = ({ onRe
   return (
     <div className="space-y-3">
       {/* Summary Banner */}
-      <div className={`flex items-start gap-3 px-4 py-3 rounded-sm border ${
-        criticalItems.length > 0
-          ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900'
-          : 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900'
-      }`}>
-        <AlertTriangle className={`h-5 w-5 shrink-0 mt-0.5 ${criticalItems.length > 0 ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400'}`} />
+      <div
+        className={`flex items-start gap-3 px-4 py-3 rounded-sm border ${
+          criticalItems.length > 0
+            ? 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900'
+            : 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900'
+        }`}
+      >
+        <AlertTriangle
+          className={`h-5 w-5 shrink-0 mt-0.5 ${criticalItems.length > 0 ? 'text-red-600 dark:text-red-400' : 'text-amber-600 dark:text-amber-400'}`}
+        />
         <div>
-          <p className={`text-sm font-bold ${criticalItems.length > 0 ? 'text-red-800 dark:text-red-300' : 'text-amber-800 dark:text-amber-300'}`}>
+          <p
+            className={`text-sm font-bold ${criticalItems.length > 0 ? 'text-red-800 dark:text-red-300' : 'text-amber-800 dark:text-amber-300'}`}
+          >
             {criticalItems.length > 0
               ? `${criticalItems.length} item${criticalItems.length > 1 ? 's' : ''} at critical stock level — immediate action required`
               : `${lowItems.length} item${lowItems.length > 1 ? 's' : ''} below reorder threshold`}
@@ -61,14 +71,20 @@ export const LowStockAlertsWidget: React.FC<LowStockAlertsWidgetProps> = ({ onRe
             >
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 leading-tight">{item.name}</p>
-                  <span className="text-[10px] font-mono text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-px rounded-sm">{item.sku}</span>
+                  <p className="text-xs font-semibold text-slate-900 dark:text-slate-100 leading-tight">
+                    {item.name}
+                  </p>
+                  <span className="text-[10px] font-mono text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-px rounded-sm">
+                    {item.sku}
+                  </span>
                 </div>
-                <span className={`text-[9px] font-bold font-mono shrink-0 px-1.5 py-0.5 rounded-sm ${
-                  isCritical
-                    ? 'text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900'
-                    : 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900'
-                }`}>
+                <span
+                  className={`text-[9px] font-bold font-mono shrink-0 px-1.5 py-0.5 rounded-sm ${
+                    isCritical
+                      ? 'text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900'
+                      : 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900'
+                  }`}
+                >
                   {isCritical ? 'CRITICAL' : 'LOW'}
                 </span>
               </div>
@@ -81,21 +97,45 @@ export const LowStockAlertsWidget: React.FC<LowStockAlertsWidgetProps> = ({ onRe
                     style={{ width: `${Math.min(100, pct(item))}%` }}
                   />
                 </div>
-                <span className="text-[10px] font-mono text-slate-500 shrink-0">{pct(item)}% of threshold</span>
+                <span className="text-[10px] font-mono text-slate-500 shrink-0">
+                  {pct(item)}% of threshold
+                </span>
               </div>
 
               {/* Metrics */}
               <div className="grid grid-cols-3 gap-2 text-center mb-3">
                 {[
-                  { label: 'In Stock',  value: `${item.currentStock} ${item.unit}`, bold: true, danger: true  },
-                  { label: 'Reorder',   value: `${item.reorderLevel} ${item.unit}`, bold: false, danger: false },
-                  { label: 'Shortage',  value: `${Math.max(0, shortage).toFixed(1)} ${item.unit}`, bold: true, danger: true  },
+                  {
+                    label: 'In Stock',
+                    value: `${item.currentStock} ${item.unit}`,
+                    bold: true,
+                    danger: true,
+                  },
+                  {
+                    label: 'Reorder',
+                    value: `${item.reorderLevel} ${item.unit}`,
+                    bold: false,
+                    danger: false,
+                  },
+                  {
+                    label: 'Shortage',
+                    value: `${Math.max(0, shortage).toFixed(1)} ${item.unit}`,
+                    bold: true,
+                    danger: true,
+                  },
                 ].map((m) => (
-                  <div key={m.label} className="bg-slate-50 dark:bg-slate-800/50 rounded-sm py-1.5 px-1">
-                    <p className={`text-[11px] font-mono ${m.bold && m.danger ? (isCritical ? 'text-red-700 dark:text-red-400 font-bold' : 'text-amber-700 dark:text-amber-400 font-bold') : 'text-slate-700 dark:text-slate-300'}`}>
+                  <div
+                    key={m.label}
+                    className="bg-slate-50 dark:bg-slate-800/50 rounded-sm py-1.5 px-1"
+                  >
+                    <p
+                      className={`text-[11px] font-mono ${m.bold && m.danger ? (isCritical ? 'text-red-700 dark:text-red-400 font-bold' : 'text-amber-700 dark:text-amber-400 font-bold') : 'text-slate-700 dark:text-slate-300'}`}
+                    >
                       {m.value}
                     </p>
-                    <p className="text-[9px] font-mono text-slate-400 uppercase tracking-wide">{m.label}</p>
+                    <p className="text-[9px] font-mono text-slate-400 uppercase tracking-wide">
+                      {m.label}
+                    </p>
                   </div>
                 ))}
               </div>

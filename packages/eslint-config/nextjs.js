@@ -1,9 +1,5 @@
 module.exports = {
-  extends: [
-    './index.js',
-    'plugin:react/recommended',
-    'plugin:react-hooks/recommended',
-  ],
+  extends: ['./index.js', 'plugin:react/recommended', 'plugin:react-hooks/recommended'],
   plugins: ['react', 'react-hooks'],
   rules: {
     'react/react-in-jsx-scope': 'off',

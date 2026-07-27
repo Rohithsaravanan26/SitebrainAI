@@ -30,18 +30,93 @@ export interface SidebarNavItem {
 }
 
 const NAV_ITEMS: SidebarNavItem[] = [
-  { id: 'overview',      label: 'Overview',        icon: <LayoutDashboard className="h-4 w-4" />, href: '/dashboard',            section: 'MAIN' },
-  { id: 'projects',      label: 'Projects',         icon: <FolderKanban className="h-4 w-4" />,   href: '/dashboard/projects',   section: 'MAIN' },
-  { id: 'workers',       label: 'Workers',           icon: <Users className="h-4 w-4" />,          href: '/dashboard/workers',    section: 'FIELD' },
-  { id: 'inventory',     label: 'Inventory',         icon: <Package className="h-4 w-4" />,        href: '/dashboard/inventory',  section: 'FIELD', badge: 3 },
-  { id: 'progress',      label: 'Progress',          icon: <BarChart3 className="h-4 w-4" />,      href: '/dashboard/progress',   section: 'FIELD' },
-  { id: 'equipment',     label: 'Equipment',         icon: <Truck className="h-4 w-4" />,          href: '/dashboard/equipment',  section: 'FIELD' },
-  { id: 'weather',        label: 'Weather',           icon: <Cloud className="h-4 w-4" />,          href: '/dashboard/weather',       section: 'INTELLIGENCE' },
-  { id: 'ai-insights',   label: 'AI Insights',       icon: <BrainCircuit className="h-4 w-4" />,   href: '/dashboard/ai-insights',   section: 'INTELLIGENCE', badge: 2 },
-  { id: 'digital-twin',  label: 'Digital Twin',      icon: <BoxSelect className="h-4 w-4" />,      href: '/dashboard/digital-twin',  section: 'INTELLIGENCE' },
-  { id: 'notifications', label: 'Notifications',     icon: <Bell className="h-4 w-4" />,           href: '/dashboard/notifications', section: 'ALERTS', badge: 7 },
-  { id: 'uploads',       label: 'Site Uploads',      icon: <Upload className="h-4 w-4" />,         href: '/dashboard/uploads',   section: 'ALERTS' },
-  { id: 'settings',      label: 'Settings',          icon: <Settings className="h-4 w-4" />,       href: '/dashboard/settings',  section: 'SYSTEM' },
+  {
+    id: 'overview',
+    label: 'Overview',
+    icon: <LayoutDashboard className="h-4 w-4" />,
+    href: '/dashboard',
+    section: 'MAIN',
+  },
+  {
+    id: 'projects',
+    label: 'Projects',
+    icon: <FolderKanban className="h-4 w-4" />,
+    href: '/dashboard/projects',
+    section: 'MAIN',
+  },
+  {
+    id: 'workers',
+    label: 'Workers',
+    icon: <Users className="h-4 w-4" />,
+    href: '/dashboard/workers',
+    section: 'FIELD',
+  },
+  {
+    id: 'inventory',
+    label: 'Inventory',
+    icon: <Package className="h-4 w-4" />,
+    href: '/dashboard/inventory',
+    section: 'FIELD',
+    badge: 3,
+  },
+  {
+    id: 'progress',
+    label: 'Progress',
+    icon: <BarChart3 className="h-4 w-4" />,
+    href: '/dashboard/progress',
+    section: 'FIELD',
+  },
+  {
+    id: 'equipment',
+    label: 'Equipment',
+    icon: <Truck className="h-4 w-4" />,
+    href: '/dashboard/equipment',
+    section: 'FIELD',
+  },
+  {
+    id: 'weather',
+    label: 'Weather',
+    icon: <Cloud className="h-4 w-4" />,
+    href: '/dashboard/weather',
+    section: 'INTELLIGENCE',
+  },
+  {
+    id: 'ai-insights',
+    label: 'AI Insights',
+    icon: <BrainCircuit className="h-4 w-4" />,
+    href: '/dashboard/ai-insights',
+    section: 'INTELLIGENCE',
+    badge: 2,
+  },
+  {
+    id: 'digital-twin',
+    label: 'Digital Twin',
+    icon: <BoxSelect className="h-4 w-4" />,
+    href: '/dashboard/digital-twin',
+    section: 'INTELLIGENCE',
+  },
+  {
+    id: 'notifications',
+    label: 'Notifications',
+    icon: <Bell className="h-4 w-4" />,
+    href: '/dashboard/notifications',
+    section: 'ALERTS',
+    badge: 7,
+  },
+  {
+    id: 'uploads',
+    label: 'Site Uploads',
+    icon: <Upload className="h-4 w-4" />,
+    href: '/dashboard/uploads',
+    section: 'ALERTS',
+  },
+  {
+    id: 'settings',
+    label: 'Settings',
+    icon: <Settings className="h-4 w-4" />,
+    href: '/dashboard/settings',
+    section: 'SYSTEM',
+  },
 ];
 
 const SECTIONS = ['MAIN', 'FIELD', 'INTELLIGENCE', 'ALERTS', 'SYSTEM'];
@@ -78,7 +153,9 @@ export const DashboardSidebar: React.FC<DashboardSidebarProps> = ({
         </div>
         {!collapsed && (
           <div>
-            <p className="text-xs font-bold text-white tracking-wider uppercase leading-tight">SiteBrain AI</p>
+            <p className="text-xs font-bold text-white tracking-wider uppercase leading-tight">
+              SiteBrain AI
+            </p>
             <p className="text-[10px] text-slate-500 font-mono leading-tight">v0.1.0 — Field Ops</p>
           </div>
         )}

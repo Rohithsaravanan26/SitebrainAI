@@ -6,3 +6,4 @@
 - [x] Inventory
 - [x] Computer Vision
 - [x] Digital Twin
+- [x] Projects & RFIs Module

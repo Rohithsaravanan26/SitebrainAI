@@ -21,18 +21,28 @@ export interface BreadcrumbsProps {
 
 export const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items, className, onNavigate }) => {
   return (
-    <nav aria-label="Breadcrumb" className={cn('flex items-center text-xs text-slate-500 dark:text-slate-400 font-mono', className)}>
+    <nav
+      aria-label="Breadcrumb"
+      className={cn(
+        'flex items-center text-xs text-slate-500 dark:text-slate-400 font-mono',
+        className
+      )}
+    >
       <ol className="flex items-center space-x-1.5">
         {items.map((item, index) => {
           const isLast = index === items.length - 1;
           return (
             <li key={index} className="flex items-center space-x-1.5">
-              {index > 0 && <ChevronRight className="h-3 w-3 text-slate-400 dark:text-slate-600 shrink-0" />}
+              {index > 0 && (
+                <ChevronRight className="h-3 w-3 text-slate-400 dark:text-slate-600 shrink-0" />
+              )}
               {isLast || !item.href ? (
                 <span
                   className={cn(
                     'font-medium truncate max-w-[200px]',
-                    isLast ? 'text-slate-900 dark:text-slate-100 font-bold' : 'text-slate-600 dark:text-slate-400'
+                    isLast
+                      ? 'text-slate-900 dark:text-slate-100 font-bold'
+                      : 'text-slate-600 dark:text-slate-400'
                   )}
                   aria-current={isLast ? 'page' : undefined}
                 >

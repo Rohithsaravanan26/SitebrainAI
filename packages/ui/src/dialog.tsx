@@ -68,11 +68,17 @@ export const Dialog: React.FC<DialogProps> = ({
         {/* Modal Header */}
         <div className="flex items-start justify-between p-4 border-b border-slate-200 dark:border-slate-800">
           <div>
-            <h2 id="dialog-title" className="text-base font-semibold text-slate-900 dark:text-slate-100">
+            <h2
+              id="dialog-title"
+              className="text-base font-semibold text-slate-900 dark:text-slate-100"
+            >
               {title}
             </h2>
             {description && (
-              <p id="dialog-description" className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <p
+                id="dialog-description"
+                className="text-xs text-slate-500 dark:text-slate-400 mt-0.5"
+              >
                 {description}
               </p>
             )}

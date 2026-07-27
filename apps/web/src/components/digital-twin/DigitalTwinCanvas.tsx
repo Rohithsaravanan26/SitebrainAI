@@ -103,28 +103,28 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
       const clickables: THREE.Object3D[] = [];
 
       // Floor definitions: label, y-base, progressStatus, columnColor
-      const FLOORS: { label: string; y: number; status: ProgressLayer; }[] = [
-        { label: 'Foundation',   y: 0,    status: 'completed'   },
-        { label: 'Podium L1',    y: 1.5,  status: 'completed'   },
-        { label: 'Podium L2',    y: 4.0,  status: 'completed'   },
-        { label: 'Podium L3',    y: 6.5,  status: 'completed'   },
-        { label: 'Tower L4',     y: 9.2,  status: 'completed'   },
-        { label: 'Tower L5',     y: 11.9, status: 'completed'   },
-        { label: 'Tower L6',     y: 14.6, status: 'completed'   },
-        { label: 'Tower L7',     y: 17.3, status: 'completed'   },
-        { label: 'Tower L8',     y: 20.0, status: 'completed'   },
-        { label: 'Tower L9',     y: 22.7, status: 'completed'   },
-        { label: 'Tower L10',    y: 25.4, status: 'completed'   },
-        { label: 'Tower L11',    y: 28.1, status: 'completed'   },
-        { label: 'Tower L12',    y: 30.8, status: 'in-progress' },
-        { label: 'Tower L13',    y: 33.5, status: 'in-progress' },
-        { label: 'Tower L14',    y: 36.2, status: 'in-progress' },
-        { label: 'Tower L15',    y: 38.9, status: 'remaining'   },
-        { label: 'Tower L16',    y: 41.6, status: 'remaining'   },
-        { label: 'Tower L17',    y: 44.3, status: 'remaining'   },
-        { label: 'Tower L18',    y: 47.0, status: 'remaining'   },
-        { label: 'Tower L19',    y: 49.7, status: 'remaining'   },
-        { label: 'Tower L20',    y: 52.4, status: 'remaining'   },
+      const FLOORS: { label: string; y: number; status: ProgressLayer }[] = [
+        { label: 'Foundation', y: 0, status: 'completed' },
+        { label: 'Podium L1', y: 1.5, status: 'completed' },
+        { label: 'Podium L2', y: 4.0, status: 'completed' },
+        { label: 'Podium L3', y: 6.5, status: 'completed' },
+        { label: 'Tower L4', y: 9.2, status: 'completed' },
+        { label: 'Tower L5', y: 11.9, status: 'completed' },
+        { label: 'Tower L6', y: 14.6, status: 'completed' },
+        { label: 'Tower L7', y: 17.3, status: 'completed' },
+        { label: 'Tower L8', y: 20.0, status: 'completed' },
+        { label: 'Tower L9', y: 22.7, status: 'completed' },
+        { label: 'Tower L10', y: 25.4, status: 'completed' },
+        { label: 'Tower L11', y: 28.1, status: 'completed' },
+        { label: 'Tower L12', y: 30.8, status: 'in-progress' },
+        { label: 'Tower L13', y: 33.5, status: 'in-progress' },
+        { label: 'Tower L14', y: 36.2, status: 'in-progress' },
+        { label: 'Tower L15', y: 38.9, status: 'remaining' },
+        { label: 'Tower L16', y: 41.6, status: 'remaining' },
+        { label: 'Tower L17', y: 44.3, status: 'remaining' },
+        { label: 'Tower L18', y: 47.0, status: 'remaining' },
+        { label: 'Tower L19', y: 49.7, status: 'remaining' },
+        { label: 'Tower L20', y: 52.4, status: 'remaining' },
       ];
 
       FLOORS.forEach((floor, idx) => {
@@ -145,10 +145,19 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
           (slab as any).__elementId = `slab-${floor.label}`;
           (slab as any).__label = `${floor.label} — Slab`;
           scene.add(slab);
-          elements.push({ id: `slab-${floor.label}`, mesh: slab, status: floor.status, label: `${floor.label} — Slab`, floor: floorNum });
+          elements.push({
+            id: `slab-${floor.label}`,
+            mesh: slab,
+            status: floor.status,
+            label: `${floor.label} — Slab`,
+            floor: floorNum,
+          });
         } else {
           const slabGeo = new THREE.BoxGeometry(w, slabH, d);
-          const mat = floor.status === 'completed' ? MATERIALS.completed.clone() : MATERIALS.inProgress.clone();
+          const mat =
+            floor.status === 'completed'
+              ? MATERIALS.completed.clone()
+              : MATERIALS.inProgress.clone();
           const slab = new THREE.Mesh(slabGeo, mat);
           slab.position.set(0, floor.y, 0);
           slab.receiveShadow = true;
@@ -157,7 +166,13 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
           (slab as any).__elementId = `slab-${floor.label}`;
           (slab as any).__label = `${floor.label} — Slab`;
           scene.add(slab);
-          elements.push({ id: `slab-${floor.label}`, mesh: slab, status: floor.status, label: `${floor.label} — Slab`, floor: floorNum });
+          elements.push({
+            id: `slab-${floor.label}`,
+            mesh: slab,
+            status: floor.status,
+            label: `${floor.label} — Slab`,
+            floor: floorNum,
+          });
           clickables.push(slab);
         }
 
@@ -170,7 +185,10 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
           const zOff = d / 2 - colR * 2;
 
           const colPositions = [
-            [xOff, zOff], [-xOff, zOff], [xOff, -zOff], [-xOff, -zOff],
+            [xOff, zOff],
+            [-xOff, zOff],
+            [xOff, -zOff],
+            [-xOff, -zOff],
           ];
 
           colPositions.forEach(([cx, cz], ci) => {
@@ -181,10 +199,19 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
               col.position.set(cx, floor.y + slabH + colH / 2, cz);
               col.name = `col-${floor.label}-${ci}`;
               scene.add(col);
-              elements.push({ id: `col-${floor.label}-${ci}`, mesh: col, status: floor.status, label: `${floor.label} — Column ${ci + 1}`, floor: floorNum });
+              elements.push({
+                id: `col-${floor.label}-${ci}`,
+                mesh: col,
+                status: floor.status,
+                label: `${floor.label} — Column ${ci + 1}`,
+                floor: floorNum,
+              });
             } else {
               const colGeo = new THREE.CylinderGeometry(colR, colR, colH, 8);
-              const mat = floor.status === 'completed' ? MATERIALS.completedColumn.clone() : MATERIALS.inProgress.clone();
+              const mat =
+                floor.status === 'completed'
+                  ? MATERIALS.completedColumn.clone()
+                  : MATERIALS.inProgress.clone();
               const col = new THREE.Mesh(colGeo, mat);
               col.position.set(cx, floor.y + slabH + colH / 2, cz);
               col.castShadow = true;
@@ -193,7 +220,13 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
               (col as any).__elementId = `col-${floor.label}-${ci}`;
               (col as any).__label = `${floor.label} — Column ${ci + 1}`;
               scene.add(col);
-              elements.push({ id: `col-${floor.label}-${ci}`, mesh: col, status: floor.status, label: `${floor.label} — Column ${ci + 1}`, floor: floorNum });
+              elements.push({
+                id: `col-${floor.label}-${ci}`,
+                mesh: col,
+                status: floor.status,
+                label: `${floor.label} — Column ${ci + 1}`,
+                floor: floorNum,
+              });
               clickables.push(col);
             }
           });
@@ -207,17 +240,32 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
             const core = new THREE.LineSegments(edges, MATERIALS.wireframeRemaining.clone());
             core.position.set(0, floor.y + slabH + colH / 2, 0);
             scene.add(core);
-            elements.push({ id: `core-${floor.label}`, mesh: core, status: floor.status, label: `${floor.label} — Core Wall`, floor: floorNum });
+            elements.push({
+              id: `core-${floor.label}`,
+              mesh: core,
+              status: floor.status,
+              label: `${floor.label} — Core Wall`,
+              floor: floorNum,
+            });
           } else {
             const coreGeo = new THREE.BoxGeometry(coreW, colH, coreD);
-            const mat = floor.status === 'completed' ? MATERIALS.completedColumn.clone() : MATERIALS.inProgress.clone();
+            const mat =
+              floor.status === 'completed'
+                ? MATERIALS.completedColumn.clone()
+                : MATERIALS.inProgress.clone();
             const core = new THREE.Mesh(coreGeo, mat);
             core.position.set(0, floor.y + slabH + colH / 2, 0);
             core.castShadow = true;
             (core as any).__elementId = `core-${floor.label}`;
             (core as any).__label = `${floor.label} — Core Wall`;
             scene.add(core);
-            elements.push({ id: `core-${floor.label}`, mesh: core, status: floor.status, label: `${floor.label} — Core Wall`, floor: floorNum });
+            elements.push({
+              id: `core-${floor.label}`,
+              mesh: core,
+              status: floor.status,
+              label: `${floor.label} — Core Wall`,
+              floor: floorNum,
+            });
             clickables.push(core);
           }
         }
@@ -249,10 +297,18 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
 
       let mat: THREE.MeshStandardMaterial;
       switch (annotation.category) {
-        case 'SAFETY_HAZARD': mat = MATERIALS.annotationSafety.clone(); break;
-        case 'DEFECT':        mat = MATERIALS.annotationDefect.clone(); break;
-        case 'QUALITY_INSPECTION': mat = MATERIALS.annotationQuality.clone(); break;
-        default:              mat = MATERIALS.annotationRfi.clone(); break;
+        case 'SAFETY_HAZARD':
+          mat = MATERIALS.annotationSafety.clone();
+          break;
+        case 'DEFECT':
+          mat = MATERIALS.annotationDefect.clone();
+          break;
+        case 'QUALITY_INSPECTION':
+          mat = MATERIALS.annotationQuality.clone();
+          break;
+        default:
+          mat = MATERIALS.annotationRfi.clone();
+          break;
       }
 
       // Diamond pin head
@@ -294,7 +350,10 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
       cameraRef.current = camera;
 
       // Renderer
-      const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+      const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        powerPreference: 'high-performance',
+      });
       renderer.setSize(W, H);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.shadowMap.enabled = true;
@@ -416,16 +475,16 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
           container.removeChild(renderer.domElement);
         }
       };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // ── Layer visibility updates ───────────────────────────────
     useEffect(() => {
       elementsRef.current.forEach((el) => {
         let visible = false;
-        if (el.status === 'completed')   visible = layers.completed;
+        if (el.status === 'completed') visible = layers.completed;
         if (el.status === 'in-progress') visible = layers.inProgress;
-        if (el.status === 'remaining')   visible = layers.remaining;
+        if (el.status === 'remaining') visible = layers.remaining;
         el.mesh.visible = visible;
       });
       annotationPinsRef.current.forEach((p) => {
@@ -458,80 +517,78 @@ const DigitalTwinCanvas = forwardRef<DigitalTwinCanvasHandle, Props>(
         }
         return true;
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [annotations]);
 
     // ── Imperative Handle ──────────────────────────────────────
-    useImperativeHandle(ref, () => ({
-      setCameraPreset: (preset: CameraPreset) => {
-        const camera = cameraRef.current;
-        const controls = controlsRef.current;
-        if (!camera || !controls) return;
+    useImperativeHandle(
+      ref,
+      () => ({
+        setCameraPreset: (preset: CameraPreset) => {
+          const camera = cameraRef.current;
+          const controls = controlsRef.current;
+          if (!camera || !controls) return;
 
-        const presets: Record<CameraPreset, { pos: THREE.Vector3; target: THREE.Vector3 }> = {
-          isometric: { pos: new THREE.Vector3(40, 30, 40), target: new THREE.Vector3(0, 25, 0) },
-          top:       { pos: new THREE.Vector3(0, 90, 0.01), target: new THREE.Vector3(0, 25, 0) },
-          front:     { pos: new THREE.Vector3(0, 25, 55), target: new THREE.Vector3(0, 25, 0) },
-          reset:     { pos: new THREE.Vector3(40, 30, 40), target: new THREE.Vector3(0, 25, 0) },
-        };
-        const { pos, target } = presets[preset];
-        camera.position.copy(pos);
-        controls.target.copy(target);
-        controls.update();
-      },
+          const presets: Record<CameraPreset, { pos: THREE.Vector3; target: THREE.Vector3 }> = {
+            isometric: { pos: new THREE.Vector3(40, 30, 40), target: new THREE.Vector3(0, 25, 0) },
+            top: { pos: new THREE.Vector3(0, 90, 0.01), target: new THREE.Vector3(0, 25, 0) },
+            front: { pos: new THREE.Vector3(0, 25, 55), target: new THREE.Vector3(0, 25, 0) },
+            reset: { pos: new THREE.Vector3(40, 30, 40), target: new THREE.Vector3(0, 25, 0) },
+          };
+          const { pos, target } = presets[preset];
+          camera.position.copy(pos);
+          controls.target.copy(target);
+          controls.update();
+        },
 
-      setLayerVisibility: (newLayers: LayerVisibility) => {
-        elementsRef.current.forEach((el) => {
-          let visible = false;
-          if (el.status === 'completed')   visible = newLayers.completed;
-          if (el.status === 'in-progress') visible = newLayers.inProgress;
-          if (el.status === 'remaining')   visible = newLayers.remaining;
-          el.mesh.visible = visible;
-        });
-        annotationPinsRef.current.forEach((p) => {
-          p.group.visible = newLayers.annotations;
-        });
-      },
+        setLayerVisibility: (newLayers: LayerVisibility) => {
+          elementsRef.current.forEach((el) => {
+            let visible = false;
+            if (el.status === 'completed') visible = newLayers.completed;
+            if (el.status === 'in-progress') visible = newLayers.inProgress;
+            if (el.status === 'remaining') visible = newLayers.remaining;
+            el.mesh.visible = visible;
+          });
+          annotationPinsRef.current.forEach((p) => {
+            p.group.visible = newLayers.annotations;
+          });
+        },
 
-      addAnnotationPin: (annotation: SpatialAnnotation) => {
-        if (!sceneRef.current) return;
-        const exists = annotationPinsRef.current.some((p) => p.id === annotation.id);
-        if (!exists) {
-          const pin = buildAnnotationPin(annotation);
-          sceneRef.current.add(pin);
-          annotationPinsRef.current.push({ id: annotation.id, group: pin });
-        }
-      },
-
-      removeAnnotationPin: (annotationId: string) => {
-        if (!sceneRef.current) return;
-        annotationPinsRef.current = annotationPinsRef.current.filter((p) => {
-          if (p.id === annotationId) {
-            sceneRef.current!.remove(p.group);
-            return false;
+        addAnnotationPin: (annotation: SpatialAnnotation) => {
+          if (!sceneRef.current) return;
+          const exists = annotationPinsRef.current.some((p) => p.id === annotation.id);
+          if (!exists) {
+            const pin = buildAnnotationPin(annotation);
+            sceneRef.current.add(pin);
+            annotationPinsRef.current.push({ id: annotation.id, group: pin });
           }
-          return true;
-        });
-      },
+        },
 
-      highlightElement: (elementId: string | null) => {
-        elementsRef.current.forEach((el) => {
-          if (el.mesh instanceof THREE.Mesh) {
-            const mat = el.mesh.material as THREE.MeshStandardMaterial;
-            mat.emissive.set(el.id === elementId ? 0xffffff : 0x000000);
-            mat.emissiveIntensity = el.id === elementId ? 0.15 : 0;
-          }
-        });
-      },
-    }), [buildAnnotationPin]);
+        removeAnnotationPin: (annotationId: string) => {
+          if (!sceneRef.current) return;
+          annotationPinsRef.current = annotationPinsRef.current.filter((p) => {
+            if (p.id === annotationId) {
+              sceneRef.current!.remove(p.group);
+              return false;
+            }
+            return true;
+          });
+        },
 
-    return (
-      <div
-        ref={mountRef}
-        className="w-full h-full"
-        style={{ background: '#0a0f1a' }}
-      />
+        highlightElement: (elementId: string | null) => {
+          elementsRef.current.forEach((el) => {
+            if (el.mesh instanceof THREE.Mesh) {
+              const mat = el.mesh.material as THREE.MeshStandardMaterial;
+              mat.emissive.set(el.id === elementId ? 0xffffff : 0x000000);
+              mat.emissiveIntensity = el.id === elementId ? 0.15 : 0;
+            }
+          });
+        },
+      }),
+      [buildAnnotationPin]
     );
+
+    return <div ref={mountRef} className="w-full h-full" style={{ background: '#0a0f1a' }} />;
   }
 );
 

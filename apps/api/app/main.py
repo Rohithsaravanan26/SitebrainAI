@@ -6,6 +6,7 @@ from app.api.v1.auth import router as auth_router
 from app.api.v1.inventory import router as inventory_router
 from app.api.v1.vision import router as vision_router
 from app.api.v1.digital_twin import router as digital_twin_router
+from app.api.v1.projects import router as projects_router
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -27,6 +28,7 @@ app.include_router(auth_router, prefix="/api/v1")
 app.include_router(inventory_router, prefix="/api/v1")
 app.include_router(vision_router, prefix="/api/v1")
 app.include_router(digital_twin_router, prefix="/api/v1")
+app.include_router(projects_router, prefix="/api/v1")
 
 @app.get("/")
 def root():

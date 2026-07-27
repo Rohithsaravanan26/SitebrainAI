@@ -9,13 +9,16 @@ interface CameraToolbarProps {
 }
 
 const PRESETS: { id: CameraPreset; label: string; icon: React.ReactNode; shortcut: string }[] = [
-  { id: 'isometric', label: 'Isometric',   icon: <Box className="h-3.5 w-3.5" />,       shortcut: '1' },
-  { id: 'top',       label: 'Top Plan',    icon: <Square className="h-3.5 w-3.5" />,    shortcut: '2' },
-  { id: 'front',     label: 'Elevation',   icon: <Mountain className="h-3.5 w-3.5" />,  shortcut: '3' },
-  { id: 'reset',     label: 'Reset',       icon: <RotateCcw className="h-3.5 w-3.5" />, shortcut: 'R' },
+  { id: 'isometric', label: 'Isometric', icon: <Box className="h-3.5 w-3.5" />, shortcut: '1' },
+  { id: 'top', label: 'Top Plan', icon: <Square className="h-3.5 w-3.5" />, shortcut: '2' },
+  { id: 'front', label: 'Elevation', icon: <Mountain className="h-3.5 w-3.5" />, shortcut: '3' },
+  { id: 'reset', label: 'Reset', icon: <RotateCcw className="h-3.5 w-3.5" />, shortcut: 'R' },
 ];
 
-export const CameraToolbar: React.FC<CameraToolbarProps> = ({ onPreset, activePreset = 'isometric' }) => {
+export const CameraToolbar: React.FC<CameraToolbarProps> = ({
+  onPreset,
+  activePreset = 'isometric',
+}) => {
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === '1') onPreset('isometric');
@@ -29,7 +32,9 @@ export const CameraToolbar: React.FC<CameraToolbarProps> = ({ onPreset, activePr
 
   return (
     <div className="flex items-center gap-1 bg-slate-900/90 border border-slate-700/80 rounded-sm px-1.5 py-1 backdrop-blur-none">
-      <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 px-1.5 shrink-0">VIEW</span>
+      <span className="text-[10px] font-mono uppercase tracking-widest text-slate-500 px-1.5 shrink-0">
+        VIEW
+      </span>
       <div className="w-px h-4 bg-slate-700" />
       {PRESETS.map((preset) => (
         <button

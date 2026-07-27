@@ -1,11 +1,13 @@
 # Project Rules & Design System Guidelines
 
 ## Core Product Vision
+
 Enterprise AI-powered Construction Intelligence Platform built for construction professionals (General Contractors, Subcontractors, Project Managers, Superintendents, BIM Managers).
 
 ---
 
 ## 🚫 Strictly Forbidden (Never Use)
+
 - **NO** flashy AI demo websites
 - **NO** glassmorphism / backdrop blur effects
 - **NO** neon colors or bright saturated futuristic fills
@@ -19,7 +21,9 @@ Enterprise AI-powered Construction Intelligence Platform built for construction 
 ---
 
 ## 🎨 Aesthetic & Design Inspiration
+
 Design inspiration and UI density reference standard enterprise platforms:
+
 - **Autodesk Construction Cloud (ACC)**
 - **Procore**
 - **Jira**
@@ -32,6 +36,7 @@ Design inspiration and UI density reference standard enterprise platforms:
 ---
 
 ## 📐 Design Principles
+
 - **Professional**: Clean, enterprise-ready data presentation.
 - **Industrial**: Rugged, reliable, built for field and office use.
 - **Minimal**: Zero decorative fluff. Every pixel serves a data purpose.
@@ -44,6 +49,7 @@ Design inspiration and UI density reference standard enterprise platforms:
 ---
 
 ## 🎨 Color Palette & Design Tokens
+
 - **Primary Colors**: White (`#FFFFFF`), Slate (`#0F172A` / `#1E293B` / `#334155`), Navy (`#0A192F` / `#1E3A8A`)
 - **Accent Color**: Construction Safety Orange (`#F97316` / `#EA580C` / `#C2410C`)
 - **Neutrals**: Crisp cool grays for borders (`#E2E8F0`), table striping (`#F8FAFC`), and subtle hover states (`#F1F5F9`).
@@ -51,6 +57,7 @@ Design inspiration and UI density reference standard enterprise platforms:
 ---
 
 ## 📏 Spacing & Typography
+
 - **Grid Standard**: Strict 8-point grid system (`8px`, `16px`, `24px`, `32px`).
 - **Typography**: Inter (System fallback: `system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`).
 - **Animations**: Disabled by default. Zero micro-interactions or motion effects unless strictly meaningful (e.g. status transition indicators, loading state skeletons).
@@ -58,6 +65,7 @@ Design inspiration and UI density reference standard enterprise platforms:
 ---
 
 ## 🛠️ Stack & Architectural Constraints
+
 - **Frontend**: Next.js (App Router, Server/Client components, Vanilla/Custom CSS).
 - **Backend API**: FastAPI (Python 3.11+, Pydantic v2, SQLAlchemy 2.0).
 - **Database**: PostgreSQL (with PostGIS & pgvector extensions).

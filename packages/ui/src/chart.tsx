@@ -27,19 +27,32 @@ export const MetricCard: React.FC<MetricCardProps> = ({
   const trendColors = {
     up: 'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-900',
     down: 'text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/50 border-red-200 dark:border-red-900',
-    neutral: 'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700',
+    neutral:
+      'text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700',
   };
 
   return (
-    <div className={cn('p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-sm', className)}>
-      <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">{title}</p>
+    <div
+      className={cn(
+        'p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-sm',
+        className
+      )}
+    >
+      <p className="text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400">
+        {title}
+      </p>
       <div className="mt-2 flex items-baseline justify-between">
         <div className="text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
           {value}
           {unit && <span className="ml-1 text-sm font-normal text-slate-500">{unit}</span>}
         </div>
         {change && (
-          <span className={cn('inline-flex items-center px-1.5 py-0.5 rounded-sm text-xs font-mono font-medium border', trendColors[trend])}>
+          <span
+            className={cn(
+              'inline-flex items-center px-1.5 py-0.5 rounded-sm text-xs font-mono font-medium border',
+              trendColors[trend]
+            )}
+          >
             {change}
           </span>
         )}
@@ -106,11 +119,20 @@ export interface SimpleBarChartProps {
   className?: string;
 }
 
-export const SimpleBarChart: React.FC<SimpleBarChartProps> = ({ data, height = 140, className }) => {
+export const SimpleBarChart: React.FC<SimpleBarChartProps> = ({
+  data,
+  height = 140,
+  className,
+}) => {
   const maxValue = Math.max(...data.map((d) => d.value), 1);
 
   return (
-    <div className={cn('w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-sm', className)}>
+    <div
+      className={cn(
+        'w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-sm',
+        className
+      )}
+    >
       <div className="flex items-end justify-between gap-2" style={{ height: `${height}px` }}>
         {data.map((item, idx) => {
           const barHeightPercentage = (item.value / maxValue) * 100;

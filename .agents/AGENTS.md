@@ -1,6 +1,7 @@
 # SiteBrain AI Agent Guidelines & Permanent System Rules
 
 ## Design & UI Constraints (STRICT & PERMANENT)
+
 - **Product Definition**: Enterprise software for construction professionals (GCs, Subcontractors, Superintendents, BIM Managers).
 - **Prohibited UI Elements**:
   - NO flashy AI demo websites

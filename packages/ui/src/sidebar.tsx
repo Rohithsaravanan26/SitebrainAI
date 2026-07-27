@@ -10,7 +10,12 @@ export interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed?: boolean;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, className, children, ...props }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  isCollapsed = false,
+  className,
+  children,
+  ...props
+}) => {
   return (
     <aside
       className={cn(
@@ -25,7 +30,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ isCollapsed = false, className
   );
 };
 
-export const SidebarSection: React.FC<{ title?: string; children: React.ReactNode }> = ({ title, children }) => (
+export const SidebarSection: React.FC<{ title?: string; children: React.ReactNode }> = ({
+  title,
+  children,
+}) => (
   <div className="py-2 space-y-1">
     {title && (
       <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">

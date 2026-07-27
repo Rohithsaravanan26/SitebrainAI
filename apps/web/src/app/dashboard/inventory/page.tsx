@@ -15,38 +15,54 @@ import {
 import { cn } from '@/lib/utils';
 import type { InventoryItem, MovementType } from '@sitebrain/types';
 import { StockOverviewTable, INVENTORY_ITEMS } from '@/components/inventory/StockOverviewTable';
-import { StockMovementModal }    from '@/components/inventory/StockMovementModal';
-import { MovementsLogTable, SEED_MOVEMENTS, type MovementRecord } from '@/components/inventory/MovementsLogTable';
-import { SuppliersTable }        from '@/components/inventory/SuppliersTable';
-import { PurchaseOrdersTable }   from '@/components/inventory/PurchaseOrdersTable';
-import { LowStockAlertsWidget }  from '@/components/inventory/LowStockAlertsWidget';
-import { QrCodeModal }           from '@/components/inventory/QrCodeModal';
+import { StockMovementModal } from '@/components/inventory/StockMovementModal';
+import {
+  MovementsLogTable,
+  SEED_MOVEMENTS,
+  type MovementRecord,
+} from '@/components/inventory/MovementsLogTable';
+import { SuppliersTable } from '@/components/inventory/SuppliersTable';
+import { PurchaseOrdersTable } from '@/components/inventory/PurchaseOrdersTable';
+import { LowStockAlertsWidget } from '@/components/inventory/LowStockAlertsWidget';
+import { QrCodeModal } from '@/components/inventory/QrCodeModal';
 
 // ─── Tab Config ─────────────────────────────────────────────────
 type Tab = 'stock' | 'movements' | 'suppliers' | 'purchase-orders' | 'alerts';
 
 const TABS: { id: Tab; label: string; icon: React.ReactNode; badge?: number }[] = [
-  { id: 'stock',           label: 'Stock',           icon: <Package className="h-3.5 w-3.5" />    },
-  { id: 'movements',       label: 'Movements',       icon: <ArrowDownUp className="h-3.5 w-3.5" /> },
-  { id: 'suppliers',       label: 'Suppliers',       icon: <Building2 className="h-3.5 w-3.5" />  },
-  { id: 'purchase-orders', label: 'Purchase Orders', icon: <ShoppingCart className="h-3.5 w-3.5" />},
-  { id: 'alerts',          label: 'Alerts',          icon: <AlertTriangle className="h-3.5 w-3.5" />,
-    badge: INVENTORY_ITEMS.filter((i) => i.currentStock <= i.reorderLevel).length },
+  { id: 'stock', label: 'Stock', icon: <Package className="h-3.5 w-3.5" /> },
+  { id: 'movements', label: 'Movements', icon: <ArrowDownUp className="h-3.5 w-3.5" /> },
+  { id: 'suppliers', label: 'Suppliers', icon: <Building2 className="h-3.5 w-3.5" /> },
+  {
+    id: 'purchase-orders',
+    label: 'Purchase Orders',
+    icon: <ShoppingCart className="h-3.5 w-3.5" />,
+  },
+  {
+    id: 'alerts',
+    label: 'Alerts',
+    icon: <AlertTriangle className="h-3.5 w-3.5" />,
+    badge: INVENTORY_ITEMS.filter((i) => i.currentStock <= i.reorderLevel).length,
+  },
 ];
 
 const CATEGORIES = Array.from(new Set(INVENTORY_ITEMS.map((i) => i.category))).sort();
 
 // ─── KPIs ────────────────────────────────────────────────────────
 function kpis() {
-  const total     = INVENTORY_ITEMS.length;
-  const lowStock  = INVENTORY_ITEMS.filter((i) => i.currentStock <= i.reorderLevel).length;
-  const critical  = INVENTORY_ITEMS.filter((i) => i.currentStock <= i.reorderLevel * 0.5).length;
-  const totalValue= INVENTORY_ITEMS.reduce((s, i) => s + i.currentStock * i.unitCost, 0);
+  const total = INVENTORY_ITEMS.length;
+  const lowStock = INVENTORY_ITEMS.filter((i) => i.currentStock <= i.reorderLevel).length;
+  const critical = INVENTORY_ITEMS.filter((i) => i.currentStock <= i.reorderLevel * 0.5).length;
+  const totalValue = INVENTORY_ITEMS.reduce((s, i) => s + i.currentStock * i.unitCost, 0);
   return { total, lowStock, critical, totalValue };
 }
 
 function fmtCurrency(n: number) {
-  return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 }).format(n);
+  return new Intl.NumberFormat('en-AU', {
+    style: 'currency',
+    currency: 'AUD',
+    maximumFractionDigits: 0,
+  }).format(n);
 }
 
 // ─── Page ────────────────────────────────────────────────────────
@@ -97,13 +113,18 @@ export default function InventoryPage() {
         {/* ── Page Header ────────────────────────────────────── */}
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-lg font-bold text-slate-900 dark:text-white">Inventory Management</h1>
+            <h1 className="text-lg font-bold text-slate-900 dark:text-white">
+              Inventory Management
+            </h1>
             <p className="text-xs font-mono text-slate-500 mt-0.5">
               Harbor City Tower — Block C · Material stock, movements & procurement
             </p>
           </div>
           <button
-            onClick={() => { setActiveTab('stock'); setMovementItem(INVENTORY_ITEMS[0] ?? null); }}
+            onClick={() => {
+              setActiveTab('stock');
+              setMovementItem(INVENTORY_ITEMS[0] ?? null);
+            }}
             className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-orange-700 hover:bg-orange-600 text-white rounded-sm transition-colors"
           >
             <Plus className="h-3.5 w-3.5" />
@@ -114,14 +135,47 @@ export default function InventoryPage() {
         {/* ── KPI Strip ──────────────────────────────────────── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { label: 'Total Items',    value: String(total),             sub: 'Tracked materials',           color: 'text-slate-900 dark:text-slate-100' },
-            { label: 'Low Stock',      value: String(lowStock),          sub: `${critical} critical`,         color: lowStock > 0 ? 'text-amber-700 dark:text-amber-400' : 'text-slate-900 dark:text-slate-100' },
-            { label: 'Critical Items', value: String(critical),          sub: 'Below 50% threshold',         color: critical > 0 ? 'text-red-700 dark:text-red-400' : 'text-slate-900 dark:text-slate-100' },
-            { label: 'Stock Value',    value: fmtCurrency(totalValue),   sub: 'Current on-hand valuation',   color: 'text-slate-900 dark:text-slate-100' },
+            {
+              label: 'Total Items',
+              value: String(total),
+              sub: 'Tracked materials',
+              color: 'text-slate-900 dark:text-slate-100',
+            },
+            {
+              label: 'Low Stock',
+              value: String(lowStock),
+              sub: `${critical} critical`,
+              color:
+                lowStock > 0
+                  ? 'text-amber-700 dark:text-amber-400'
+                  : 'text-slate-900 dark:text-slate-100',
+            },
+            {
+              label: 'Critical Items',
+              value: String(critical),
+              sub: 'Below 50% threshold',
+              color:
+                critical > 0
+                  ? 'text-red-700 dark:text-red-400'
+                  : 'text-slate-900 dark:text-slate-100',
+            },
+            {
+              label: 'Stock Value',
+              value: fmtCurrency(totalValue),
+              sub: 'Current on-hand valuation',
+              color: 'text-slate-900 dark:text-slate-100',
+            },
           ].map((kpi) => (
-            <div key={kpi.label} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-sm px-4 py-3">
-              <p className={`text-xl font-bold font-mono leading-tight ${kpi.color}`}>{kpi.value}</p>
-              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono mt-0.5">{kpi.label}</p>
+            <div
+              key={kpi.label}
+              className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-sm px-4 py-3"
+            >
+              <p className={`text-xl font-bold font-mono leading-tight ${kpi.color}`}>
+                {kpi.value}
+              </p>
+              <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono mt-0.5">
+                {kpi.label}
+              </p>
               <p className="text-[10px] text-slate-400 font-mono">{kpi.sub}</p>
             </div>
           ))}
@@ -143,12 +197,12 @@ export default function InventoryPage() {
               {tab.icon}
               {tab.label}
               {tab.badge !== undefined && tab.badge > 0 && (
-                <span className={cn(
-                  'text-[9px] font-bold font-mono px-1.5 py-px rounded-sm',
-                  tab.id === 'alerts'
-                    ? 'bg-red-700 text-white'
-                    : 'bg-orange-700 text-white'
-                )}>
+                <span
+                  className={cn(
+                    'text-[9px] font-bold font-mono px-1.5 py-px rounded-sm',
+                    tab.id === 'alerts' ? 'bg-red-700 text-white' : 'bg-orange-700 text-white'
+                  )}
+                >
                   {tab.badge}
                 </span>
               )}
@@ -181,7 +235,11 @@ export default function InventoryPage() {
                   className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-sm px-2.5 py-1.5 text-xs text-slate-700 dark:text-slate-300 focus:outline-none focus:border-orange-500"
                 >
                   <option value="">All Categories</option>
-                  {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                  {CATEGORIES.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
                 </select>
               </div>
               <label className="flex items-center gap-1.5 cursor-pointer select-none">
@@ -191,7 +249,9 @@ export default function InventoryPage() {
                   onChange={(e) => setLowStockOnly(e.target.checked)}
                   className="rounded-sm border-slate-300 accent-orange-600"
                 />
-                <span className="text-xs text-slate-600 dark:text-slate-400 font-mono">Low stock only</span>
+                <span className="text-xs text-slate-600 dark:text-slate-400 font-mono">
+                  Low stock only
+                </span>
               </label>
             </div>
 
@@ -206,9 +266,7 @@ export default function InventoryPage() {
         )}
 
         {/* MOVEMENTS TAB */}
-        {activeTab === 'movements' && (
-          <MovementsLogTable extra={movements} />
-        )}
+        {activeTab === 'movements' && <MovementsLogTable extra={movements} />}
 
         {/* SUPPLIERS TAB */}
         {activeTab === 'suppliers' && <SuppliersTable />}
@@ -217,9 +275,7 @@ export default function InventoryPage() {
         {activeTab === 'purchase-orders' && <PurchaseOrdersTable />}
 
         {/* ALERTS TAB */}
-        {activeTab === 'alerts' && (
-          <LowStockAlertsWidget onReorder={setMovementItem} />
-        )}
+        {activeTab === 'alerts' && <LowStockAlertsWidget onReorder={setMovementItem} />}
       </div>
     </>
   );

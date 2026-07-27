@@ -51,7 +51,9 @@ export default function ForgotPasswordPage() {
           <div className="bg-orange-600 p-1 rounded-sm">
             <HardHat className="h-4 w-4 text-white" />
           </div>
-          <span className="font-bold tracking-wider uppercase text-xs text-white">SiteBrain AI</span>
+          <span className="font-bold tracking-wider uppercase text-xs text-white">
+            SiteBrain AI
+          </span>
         </div>
         <span className="font-mono text-[11px] text-slate-400">Account Recovery</span>
       </HeaderNav>
@@ -80,11 +82,7 @@ export default function ForgotPasswordPage() {
               )}
 
               {message && (
-                <Alert
-                  variant="info"
-                  title="Reset Request Processed"
-                  description={message}
-                />
+                <Alert variant="info" title="Reset Request Processed" description={message} />
               )}
 
               {generatedToken && (

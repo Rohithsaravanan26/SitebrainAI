@@ -5,20 +5,54 @@ import { X, Package, ArrowDownCircle, ArrowUpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { InventoryItem, MovementType } from '@sitebrain/types';
 
-const MOVEMENT_TYPES: { value: MovementType; label: string; icon: React.ReactNode; color: string }[] = [
-  { value: 'INCOMING',   label: 'Incoming Delivery',   icon: <ArrowDownCircle className="h-4 w-4" />, color: 'text-emerald-600' },
-  { value: 'OUTGOING',   label: 'Site Dispatch',       icon: <ArrowUpCircle className="h-4 w-4" />,  color: 'text-orange-600'  },
-  { value: 'ADJUSTMENT', label: 'Stock Adjustment',    icon: <Package className="h-4 w-4" />,        color: 'text-blue-600'    },
-  { value: 'RETURN',     label: 'Return to Yard',      icon: <ArrowDownCircle className="h-4 w-4" />,color: 'text-slate-600'   },
+const MOVEMENT_TYPES: {
+  value: MovementType;
+  label: string;
+  icon: React.ReactNode;
+  color: string;
+}[] = [
+  {
+    value: 'INCOMING',
+    label: 'Incoming Delivery',
+    icon: <ArrowDownCircle className="h-4 w-4" />,
+    color: 'text-emerald-600',
+  },
+  {
+    value: 'OUTGOING',
+    label: 'Site Dispatch',
+    icon: <ArrowUpCircle className="h-4 w-4" />,
+    color: 'text-orange-600',
+  },
+  {
+    value: 'ADJUSTMENT',
+    label: 'Stock Adjustment',
+    icon: <Package className="h-4 w-4" />,
+    color: 'text-blue-600',
+  },
+  {
+    value: 'RETURN',
+    label: 'Return to Yard',
+    icon: <ArrowDownCircle className="h-4 w-4" />,
+    color: 'text-slate-600',
+  },
 ];
 
 interface StockMovementModalProps {
   item: InventoryItem | null;
   onClose: () => void;
-  onConfirm: (movementType: MovementType, quantity: number, referenceNo: string, notes: string) => void;
+  onConfirm: (
+    movementType: MovementType,
+    quantity: number,
+    referenceNo: string,
+    notes: string
+  ) => void;
 }
 
-export const StockMovementModal: React.FC<StockMovementModalProps> = ({ item, onClose, onConfirm }) => {
+export const StockMovementModal: React.FC<StockMovementModalProps> = ({
+  item,
+  onClose,
+  onConfirm,
+}) => {
   const [movementType, setMovementType] = React.useState<MovementType>('INCOMING');
   const [quantity, setQuantity] = React.useState('');
   const [referenceNo, setReferenceNo] = React.useState('');
@@ -31,8 +65,14 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({ item, on
     e.preventDefault();
     setError('');
     const qty = parseFloat(quantity);
-    if (!qty || qty <= 0) { setError('Enter a valid positive quantity.'); return; }
-    if (!referenceNo.trim()) { setError('Reference number is required.'); return; }
+    if (!qty || qty <= 0) {
+      setError('Enter a valid positive quantity.');
+      return;
+    }
+    if (!referenceNo.trim()) {
+      setError('Reference number is required.');
+      return;
+    }
     if (movementType === 'OUTGOING' && qty > item.currentStock) {
       setError(`Cannot dispatch more than current stock (${item.currentStock} ${item.unit}).`);
       return;
@@ -51,9 +91,14 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({ item, on
         <div className="flex items-center justify-between px-5 py-3.5 border-b border-slate-200 dark:border-slate-800">
           <div>
             <h2 className="text-sm font-bold text-slate-900 dark:text-white">Stock Movement</h2>
-            <p className="text-[11px] text-slate-400 font-mono mt-0.5">{item.sku} — {item.name}</p>
+            <p className="text-[11px] text-slate-400 font-mono mt-0.5">
+              {item.sku} — {item.name}
+            </p>
           </div>
-          <button onClick={onClose} className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-sm transition-colors">
+          <button
+            onClick={onClose}
+            className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-sm transition-colors"
+          >
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -62,13 +107,27 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({ item, on
         <div className="px-5 py-3 bg-slate-50 dark:bg-slate-800/40 border-b border-slate-200 dark:border-slate-800">
           <div className="grid grid-cols-3 gap-4 text-center">
             {[
-              { label: 'On Hand', value: `${item.currentStock} ${item.unit}`, color: 'text-slate-900 dark:text-slate-100' },
-              { label: 'Allocated', value: `${item.allocatedStock} ${item.unit}`, color: 'text-amber-700 dark:text-amber-400' },
-              { label: 'Available', value: `${Math.max(0, item.currentStock - item.allocatedStock)} ${item.unit}`, color: 'text-emerald-700 dark:text-emerald-400' },
+              {
+                label: 'On Hand',
+                value: `${item.currentStock} ${item.unit}`,
+                color: 'text-slate-900 dark:text-slate-100',
+              },
+              {
+                label: 'Allocated',
+                value: `${item.allocatedStock} ${item.unit}`,
+                color: 'text-amber-700 dark:text-amber-400',
+              },
+              {
+                label: 'Available',
+                value: `${Math.max(0, item.currentStock - item.allocatedStock)} ${item.unit}`,
+                color: 'text-emerald-700 dark:text-emerald-400',
+              },
             ].map((s) => (
               <div key={s.label}>
                 <p className={`text-sm font-bold font-mono ${s.color}`}>{s.value}</p>
-                <p className="text-[10px] text-slate-500 uppercase font-mono tracking-wider">{s.label}</p>
+                <p className="text-[10px] text-slate-500 uppercase font-mono tracking-wider">
+                  {s.label}
+                </p>
               </div>
             ))}
           </div>
@@ -78,7 +137,9 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({ item, on
         <form onSubmit={handleSubmit} className="px-5 py-4 space-y-3.5">
           {/* Movement Type */}
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono mb-1.5 block">Movement Type</label>
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono mb-1.5 block">
+              Movement Type
+            </label>
             <div className="grid grid-cols-2 gap-1.5">
               {MOVEMENT_TYPES.map((mt) => (
                 <button
@@ -92,7 +153,11 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({ item, on
                       : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
                   )}
                 >
-                  <span className={movementType === mt.value ? 'text-orange-600' : 'text-slate-400'}>{mt.icon}</span>
+                  <span
+                    className={movementType === mt.value ? 'text-orange-600' : 'text-slate-400'}
+                  >
+                    {mt.icon}
+                  </span>
                   {mt.label}
                 </button>
               ))}
@@ -131,7 +196,9 @@ export const StockMovementModal: React.FC<StockMovementModalProps> = ({ item, on
 
           {/* Notes */}
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono mb-1 block">Notes (optional)</label>
+            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono mb-1 block">
+              Notes (optional)
+            </label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}

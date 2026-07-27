@@ -15,10 +15,34 @@ const LAYER_DEFS: {
   color: string;
   count: number;
 }[] = [
-  { key: 'completed',  label: 'Completed',   sub: 'L1 – L11 · 184 elements',  color: 'bg-emerald-500',  count: 184 },
-  { key: 'inProgress', label: 'In Progress',  sub: 'L12 – L14 · 48 elements',  color: 'bg-orange-500',   count: 48  },
-  { key: 'remaining',  label: 'Remaining',    sub: 'L15 – L20 · 52 elements',  color: 'bg-slate-500',    count: 52  },
-  { key: 'annotations',label: 'Annotations',  sub: 'RFIs · Safety · Defects',  color: 'bg-amber-500',    count: 0   },
+  {
+    key: 'completed',
+    label: 'Completed',
+    sub: 'L1 – L11 · 184 elements',
+    color: 'bg-emerald-500',
+    count: 184,
+  },
+  {
+    key: 'inProgress',
+    label: 'In Progress',
+    sub: 'L12 – L14 · 48 elements',
+    color: 'bg-orange-500',
+    count: 48,
+  },
+  {
+    key: 'remaining',
+    label: 'Remaining',
+    sub: 'L15 – L20 · 52 elements',
+    color: 'bg-slate-500',
+    count: 52,
+  },
+  {
+    key: 'annotations',
+    label: 'Annotations',
+    sub: 'RFIs · Safety · Defects',
+    color: 'bg-amber-500',
+    count: 0,
+  },
 ];
 
 export const LayerControlPanel: React.FC<LayerControlPanelProps> = ({ layers, onChange }) => {
@@ -38,7 +62,9 @@ export const LayerControlPanel: React.FC<LayerControlPanelProps> = ({ layers, on
       <div className="flex items-center justify-between px-3 py-2 border-b border-slate-800">
         <div className="flex items-center gap-1.5">
           <Layers className="h-3.5 w-3.5 text-slate-400" />
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300 font-mono">Layers</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-300 font-mono">
+            Layers
+          </span>
         </div>
         <button
           onClick={toggleAll}
@@ -63,17 +89,30 @@ export const LayerControlPanel: React.FC<LayerControlPanelProps> = ({ layers, on
               )}
             >
               {/* Color chip */}
-              <span className={cn('w-2.5 h-2.5 rounded-sm shrink-0', def.color, !isVisible && 'opacity-40')} />
+              <span
+                className={cn(
+                  'w-2.5 h-2.5 rounded-sm shrink-0',
+                  def.color,
+                  !isVisible && 'opacity-40'
+                )}
+              />
               <div className="flex-1 min-w-0">
-                <p className={cn('text-[11px] font-semibold leading-tight', isVisible ? 'text-slate-200' : 'text-slate-500')}>
-                  {def.layer = undefined, def.label}
+                <p
+                  className={cn(
+                    'text-[11px] font-semibold leading-tight',
+                    isVisible ? 'text-slate-200' : 'text-slate-500'
+                  )}
+                >
+                  {((def.layer = undefined), def.label)}
                 </p>
                 <p className="text-[10px] text-slate-500 font-mono leading-tight">{def.sub}</p>
               </div>
               <div className="shrink-0">
-                {isVisible
-                  ? <Eye className="h-3.5 w-3.5 text-slate-400" />
-                  : <EyeOff className="h-3.5 w-3.5 text-slate-600" />}
+                {isVisible ? (
+                  <Eye className="h-3.5 w-3.5 text-slate-400" />
+                ) : (
+                  <EyeOff className="h-3.5 w-3.5 text-slate-600" />
+                )}
               </div>
             </button>
           );
@@ -85,7 +124,9 @@ export const LayerControlPanel: React.FC<LayerControlPanelProps> = ({ layers, on
         <p className="text-[10px] font-mono text-slate-500 leading-tight">
           Harbor City Tower — Block C
         </p>
-        <p className="text-[10px] font-mono text-slate-600 leading-tight">BIM-REV-12 · 284 elements total</p>
+        <p className="text-[10px] font-mono text-slate-600 leading-tight">
+          BIM-REV-12 · 284 elements total
+        </p>
       </div>
     </div>
   );

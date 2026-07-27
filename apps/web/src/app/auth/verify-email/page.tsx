@@ -63,7 +63,9 @@ export default function VerifyEmailPage() {
           <div className="bg-orange-600 p-1 rounded-sm">
             <HardHat className="h-4 w-4 text-white" />
           </div>
-          <span className="font-bold tracking-wider uppercase text-xs text-white">SiteBrain AI</span>
+          <span className="font-bold tracking-wider uppercase text-xs text-white">
+            SiteBrain AI
+          </span>
         </div>
         <span className="font-mono text-[11px] text-slate-400">Email Verification</span>
       </HeaderNav>
@@ -91,13 +93,7 @@ export default function VerifyEmailPage() {
                 />
               )}
 
-              {message && (
-                <Alert
-                  variant="success"
-                  title="Email Verified"
-                  description={message}
-                />
-              )}
+              {message && <Alert variant="success" title="Email Verified" description={message} />}
 
               <div className="space-y-1.5">
                 <Label htmlFor="token">Verification Token</Label>

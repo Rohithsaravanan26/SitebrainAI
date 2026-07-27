@@ -11,7 +11,8 @@ const SAMPLE_ANNOTATIONS: SpatialAnnotation[] = [
     id: 'ann-1',
     modelId: 'model-1',
     title: 'RFI #247 — Footing setdown depth discrepancy',
-    description: 'Structural drawing SK-STRUCT-C-187 Rev3 conflicts with architectural drawings at grid G-12. Requires structural engineer review.',
+    description:
+      'Structural drawing SK-STRUCT-C-187 Rev3 conflicts with architectural drawings at grid G-12. Requires structural engineer review.',
     category: 'RFI',
     positionX: 4,
     positionY: 9,
@@ -24,7 +25,8 @@ const SAMPLE_ANNOTATIONS: SpatialAnnotation[] = [
     id: 'ann-2',
     modelId: 'model-1',
     title: 'Safety Hazard — Unsecured scaffold planks',
-    description: 'Scaffold boards on level 13 north elevation found unsecured. Risk of falling object. Barricade area pending fix.',
+    description:
+      'Scaffold boards on level 13 north elevation found unsecured. Risk of falling object. Barricade area pending fix.',
     category: 'SAFETY_HAZARD',
     positionX: -4,
     positionY: 33,
@@ -37,7 +39,8 @@ const SAMPLE_ANNOTATIONS: SpatialAnnotation[] = [
     id: 'ann-3',
     modelId: 'model-1',
     title: 'Defect — Honeycombing in L10 slab soffit',
-    description: 'Honeycombing observed in the soffit of L10 slab pour. Extent: 0.4m². Awaiting engineer assessment for repair methodology.',
+    description:
+      'Honeycombing observed in the soffit of L10 slab pour. Extent: 0.4m². Awaiting engineer assessment for repair methodology.',
     category: 'DEFECT',
     positionX: 2,
     positionY: 25,
@@ -50,7 +53,8 @@ const SAMPLE_ANNOTATIONS: SpatialAnnotation[] = [
     id: 'ann-4',
     modelId: 'model-1',
     title: 'QA Inspection — Rebar cover check L12 columns',
-    description: 'Rebar cover on L12 perimeter columns passed 40mm requirement. ITP signed off by Tier 1 inspector.',
+    description:
+      'Rebar cover on L12 perimeter columns passed 40mm requirement. ITP signed off by Tier 1 inspector.',
     category: 'QUALITY_INSPECTION',
     positionX: -3,
     positionY: 30,
@@ -70,17 +74,42 @@ type NewAnnotationForm = {
   positionZ: string;
 };
 
-const CATEGORY_CONFIG: Record<AnnotationCategory, { label: string; icon: React.ReactNode; color: string; bg: string }> = {
-  RFI:                { label: 'RFI',           icon: <FileText className="h-3.5 w-3.5" />,       color: 'text-amber-600 dark:text-amber-400',   bg: 'bg-amber-50 dark:bg-amber-950/40'   },
-  SAFETY_HAZARD:      { label: 'Safety',         icon: <AlertTriangle className="h-3.5 w-3.5" />,  color: 'text-red-600 dark:text-red-400',        bg: 'bg-red-50 dark:bg-red-950/40'       },
-  DEFECT:             { label: 'Defect',         icon: <X className="h-3.5 w-3.5" />,              color: 'text-purple-600 dark:text-purple-400',  bg: 'bg-purple-50 dark:bg-purple-950/40' },
-  QUALITY_INSPECTION: { label: 'QA Check',       icon: <CheckCircle2 className="h-3.5 w-3.5" />,   color: 'text-cyan-600 dark:text-cyan-400',      bg: 'bg-cyan-50 dark:bg-cyan-950/40'     },
+const CATEGORY_CONFIG: Record<
+  AnnotationCategory,
+  { label: string; icon: React.ReactNode; color: string; bg: string }
+> = {
+  RFI: {
+    label: 'RFI',
+    icon: <FileText className="h-3.5 w-3.5" />,
+    color: 'text-amber-600 dark:text-amber-400',
+    bg: 'bg-amber-50 dark:bg-amber-950/40',
+  },
+  SAFETY_HAZARD: {
+    label: 'Safety',
+    icon: <AlertTriangle className="h-3.5 w-3.5" />,
+    color: 'text-red-600 dark:text-red-400',
+    bg: 'bg-red-50 dark:bg-red-950/40',
+  },
+  DEFECT: {
+    label: 'Defect',
+    icon: <X className="h-3.5 w-3.5" />,
+    color: 'text-purple-600 dark:text-purple-400',
+    bg: 'bg-purple-50 dark:bg-purple-950/40',
+  },
+  QUALITY_INSPECTION: {
+    label: 'QA Check',
+    icon: <CheckCircle2 className="h-3.5 w-3.5" />,
+    color: 'text-cyan-600 dark:text-cyan-400',
+    bg: 'bg-cyan-50 dark:bg-cyan-950/40',
+  },
 };
 
 const STATUS_CONFIG: Record<string, string> = {
-  OPEN:         'text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900',
-  RESOLVED:     'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900',
-  UNDER_REVIEW: 'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900',
+  OPEN: 'text-red-700 dark:text-red-400 bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-900',
+  RESOLVED:
+    'text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-900',
+  UNDER_REVIEW:
+    'text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-900',
 };
 
 function timeAgo(iso: string): string {
@@ -118,9 +147,8 @@ export const AnnotationsList: React.FC<AnnotationsListProps> = ({
     positionZ: '0',
   });
 
-  const filtered = filter === 'ALL'
-    ? annotations
-    : annotations.filter((a) => a.category === filter);
+  const filtered =
+    filter === 'ALL' ? annotations : annotations.filter((a) => a.category === filter);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,7 +168,14 @@ export const AnnotationsList: React.FC<AnnotationsListProps> = ({
     };
     onAdd?.(newAnnotation);
     setShowForm(false);
-    setForm({ title: '', description: '', category: 'RFI', positionX: '0', positionY: '20', positionZ: '0' });
+    setForm({
+      title: '',
+      description: '',
+      category: 'RFI',
+      positionX: '0',
+      positionY: '20',
+      positionZ: '0',
+    });
   };
 
   return (
@@ -167,12 +202,19 @@ export const AnnotationsList: React.FC<AnnotationsListProps> = ({
 
       {/* Add Annotation Form */}
       {showForm && (
-        <form onSubmit={handleSubmit} className="border-b border-slate-800 p-3 bg-slate-950/60 space-y-2 shrink-0">
-          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono mb-2">New Annotation</p>
+        <form
+          onSubmit={handleSubmit}
+          className="border-b border-slate-800 p-3 bg-slate-950/60 space-y-2 shrink-0"
+        >
+          <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono mb-2">
+            New Annotation
+          </p>
 
           <select
             value={form.category}
-            onChange={(e) => setForm((f) => ({ ...f, category: e.target.value as AnnotationCategory }))}
+            onChange={(e) =>
+              setForm((f) => ({ ...f, category: e.target.value as AnnotationCategory }))
+            }
             className="w-full bg-slate-800 border border-slate-700 rounded-sm px-2 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-orange-600"
           >
             <option value="RFI">RFI</option>
@@ -201,7 +243,9 @@ export const AnnotationsList: React.FC<AnnotationsListProps> = ({
           <div className="grid grid-cols-3 gap-1">
             {(['positionX', 'positionY', 'positionZ'] as const).map((axis) => (
               <div key={axis}>
-                <label className="text-[10px] font-mono text-slate-500 uppercase">{axis.replace('position', '')}</label>
+                <label className="text-[10px] font-mono text-slate-500 uppercase">
+                  {axis.replace('position', '')}
+                </label>
                 <input
                   type="number"
                   step="0.1"
@@ -214,7 +258,10 @@ export const AnnotationsList: React.FC<AnnotationsListProps> = ({
           </div>
 
           <div className="flex gap-2 pt-1">
-            <button type="submit" className="flex-1 bg-orange-700 hover:bg-orange-600 text-white text-xs py-1.5 rounded-sm font-medium transition-colors">
+            <button
+              type="submit"
+              className="flex-1 bg-orange-700 hover:bg-orange-600 text-white text-xs py-1.5 rounded-sm font-medium transition-colors"
+            >
               Place Pin
             </button>
             <button
@@ -241,7 +288,13 @@ export const AnnotationsList: React.FC<AnnotationsListProps> = ({
                 : 'text-slate-500 border-slate-800 hover:text-slate-300 hover:border-slate-700'
             )}
           >
-            {cat === 'ALL' ? 'All' : cat === 'SAFETY_HAZARD' ? 'Safety' : cat === 'QUALITY_INSPECTION' ? 'QA' : cat}
+            {cat === 'ALL'
+              ? 'All'
+              : cat === 'SAFETY_HAZARD'
+                ? 'Safety'
+                : cat === 'QUALITY_INSPECTION'
+                  ? 'QA'
+                  : cat}
           </button>
         ))}
       </div>
@@ -267,7 +320,13 @@ export const AnnotationsList: React.FC<AnnotationsListProps> = ({
                 )}
               >
                 <div className="flex items-start gap-2">
-                  <div className={cn('flex h-6 w-6 items-center justify-center rounded-sm shrink-0 mt-0.5', cat.bg, cat.color)}>
+                  <div
+                    className={cn(
+                      'flex h-6 w-6 items-center justify-center rounded-sm shrink-0 mt-0.5',
+                      cat.bg,
+                      cat.color
+                    )}
+                  >
                     {cat.icon}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -275,22 +334,31 @@ export const AnnotationsList: React.FC<AnnotationsListProps> = ({
                       <p className="text-[11px] font-semibold text-slate-200 leading-tight line-clamp-2 flex-1">
                         {ann.title}
                       </p>
-                      {isSelected && <ChevronRight className="h-3.5 w-3.5 text-orange-500 shrink-0 mt-0.5" />}
+                      {isSelected && (
+                        <ChevronRight className="h-3.5 w-3.5 text-orange-500 shrink-0 mt-0.5" />
+                      )}
                     </div>
                     <div className="flex items-center gap-1.5 mt-1 flex-wrap">
-                      <span className={cn(
-                        'text-[9px] font-bold font-mono uppercase tracking-wider px-1 py-px rounded-sm border',
-                        STATUS_CONFIG[ann.status] ?? STATUS_CONFIG.OPEN
-                      )}>
+                      <span
+                        className={cn(
+                          'text-[9px] font-bold font-mono uppercase tracking-wider px-1 py-px rounded-sm border',
+                          STATUS_CONFIG[ann.status] ?? STATUS_CONFIG.OPEN
+                        )}
+                      >
                         {ann.status.replace('_', ' ')}
                       </span>
-                      <span className="text-[10px] text-slate-500 font-mono">{timeAgo(ann.createdAt)}</span>
                       <span className="text-[10px] text-slate-500 font-mono">
-                        ({ann.positionX.toFixed(1)}, {ann.positionY.toFixed(1)}, {ann.positionZ.toFixed(1)})
+                        {timeAgo(ann.createdAt)}
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-mono">
+                        ({ann.positionX.toFixed(1)}, {ann.positionY.toFixed(1)},{' '}
+                        {ann.positionZ.toFixed(1)})
                       </span>
                     </div>
                     {ann.description && (
-                      <p className="text-[10px] text-slate-500 mt-1 line-clamp-2 leading-snug">{ann.description}</p>
+                      <p className="text-[10px] text-slate-500 mt-1 line-clamp-2 leading-snug">
+                        {ann.description}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -304,9 +372,21 @@ export const AnnotationsList: React.FC<AnnotationsListProps> = ({
       <div className="px-3 py-2 border-t border-slate-800 bg-slate-950/60 shrink-0">
         <div className="grid grid-cols-3 gap-2 text-center">
           {[
-            { label: 'Open',    value: annotations.filter((a) => a.status === 'OPEN').length,         color: 'text-red-400'     },
-            { label: 'Review',  value: annotations.filter((a) => a.status === 'UNDER_REVIEW').length, color: 'text-amber-400'   },
-            { label: 'Closed',  value: annotations.filter((a) => a.status === 'RESOLVED').length,     color: 'text-emerald-400' },
+            {
+              label: 'Open',
+              value: annotations.filter((a) => a.status === 'OPEN').length,
+              color: 'text-red-400',
+            },
+            {
+              label: 'Review',
+              value: annotations.filter((a) => a.status === 'UNDER_REVIEW').length,
+              color: 'text-amber-400',
+            },
+            {
+              label: 'Closed',
+              value: annotations.filter((a) => a.status === 'RESOLVED').length,
+              color: 'text-emerald-400',
+            },
           ].map((stat) => (
             <div key={stat.label}>
               <p className={cn('text-sm font-bold font-mono', stat.color)}>{stat.value}</p>

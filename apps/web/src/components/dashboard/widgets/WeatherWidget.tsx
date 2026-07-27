@@ -29,10 +29,30 @@ export const WeatherWidget: React.FC = () => {
       {/* Metric Grid */}
       <div className="grid grid-cols-2 gap-2">
         {[
-          { icon: <Wind className="h-3.5 w-3.5" />,        label: 'Wind Speed',  value: '-- km/h',  note: 'Crane ops threshold: 72km/h' },
-          { icon: <Droplets className="h-3.5 w-3.5" />,    label: 'Humidity',    value: '--%',       note: 'Concrete pour threshold' },
-          { icon: <CloudRain className="h-3.5 w-3.5" />,   label: 'Precipitation',value: '-- mm',    note: '24-hour forecast' },
-          { icon: <Eye className="h-3.5 w-3.5" />,         label: 'Visibility',  value: '-- km',    note: 'Site safety threshold: 1km' },
+          {
+            icon: <Wind className="h-3.5 w-3.5" />,
+            label: 'Wind Speed',
+            value: '-- km/h',
+            note: 'Crane ops threshold: 72km/h',
+          },
+          {
+            icon: <Droplets className="h-3.5 w-3.5" />,
+            label: 'Humidity',
+            value: '--%',
+            note: 'Concrete pour threshold',
+          },
+          {
+            icon: <CloudRain className="h-3.5 w-3.5" />,
+            label: 'Precipitation',
+            value: '-- mm',
+            note: '24-hour forecast',
+          },
+          {
+            icon: <Eye className="h-3.5 w-3.5" />,
+            label: 'Visibility',
+            value: '-- km',
+            note: 'Site safety threshold: 1km',
+          },
         ].map((item) => (
           <div
             key={item.label}
@@ -42,7 +62,9 @@ export const WeatherWidget: React.FC = () => {
               {item.icon}
               <span className="text-[10px] font-medium uppercase tracking-wider">{item.label}</span>
             </div>
-            <p className="text-base font-bold font-mono text-slate-400 dark:text-slate-500">{item.value}</p>
+            <p className="text-base font-bold font-mono text-slate-400 dark:text-slate-500">
+              {item.value}
+            </p>
             <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">{item.note}</p>
           </div>
         ))}
@@ -50,7 +72,8 @@ export const WeatherWidget: React.FC = () => {
 
       {/* Integration Notice */}
       <div className="mt-3 p-2 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 rounded-sm text-[11px] text-amber-800 dark:text-amber-300 font-mono">
-        Connect Bureau of Meteorology / OpenWeatherMap API to populate live site weather and crane wind hold alerts.
+        Connect Bureau of Meteorology / OpenWeatherMap API to populate live site weather and crane
+        wind hold alerts.
       </div>
     </WidgetShell>
   );

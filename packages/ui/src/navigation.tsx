@@ -7,7 +7,11 @@ function cn(...inputs: ClassValue[]) {
 }
 
 // Enterprise Header Nav Bar
-export const HeaderNav: React.FC<React.HTMLAttributes<HTMLElement>> = ({ className, children, ...props }) => (
+export const HeaderNav: React.FC<React.HTMLAttributes<HTMLElement>> = ({
+  className,
+  children,
+  ...props
+}) => (
   <header
     className={cn(
       'h-12 bg-slate-900 text-white border-b border-slate-800 px-4 flex items-center justify-between text-xs',
@@ -36,7 +40,9 @@ export interface TabsProps {
 
 export const Tabs: React.FC<TabsProps> = ({ tabs, activeTab, onChange, className }) => {
   return (
-    <div className={cn('border-b border-slate-200 dark:border-slate-800 flex space-x-6', className)}>
+    <div
+      className={cn('border-b border-slate-200 dark:border-slate-800 flex space-x-6', className)}
+    >
       {tabs.map((tab) => {
         const isActive = tab.id === activeTab;
         return (
@@ -80,9 +86,19 @@ export interface SegmentedControlProps {
   className?: string;
 }
 
-export const SegmentedControl: React.FC<SegmentedControlProps> = ({ options, value, onChange, className }) => {
+export const SegmentedControl: React.FC<SegmentedControlProps> = ({
+  options,
+  value,
+  onChange,
+  className,
+}) => {
   return (
-    <div className={cn('inline-flex p-0.5 bg-slate-200 dark:bg-slate-800 rounded-sm border border-slate-300 dark:border-slate-700 text-xs font-medium', className)}>
+    <div
+      className={cn(
+        'inline-flex p-0.5 bg-slate-200 dark:bg-slate-800 rounded-sm border border-slate-300 dark:border-slate-700 text-xs font-medium',
+        className
+      )}
+    >
       {options.map((opt) => {
         const isSelected = opt.value === value;
         return (

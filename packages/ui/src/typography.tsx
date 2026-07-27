@@ -62,7 +62,11 @@ export const Text: React.FC<TextProps> = ({
   );
 };
 
-export const Code: React.FC<React.HTMLAttributes<HTMLElement>> = ({ className, children, ...props }) => (
+export const Code: React.FC<React.HTMLAttributes<HTMLElement>> = ({
+  className,
+  children,
+  ...props
+}) => (
   <code
     className={cn(
       'font-mono text-xs px-1.5 py-0.5 rounded-sm bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700',

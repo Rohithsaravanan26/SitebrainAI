@@ -2,14 +2,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Bell,
-  ChevronDown,
-  HardHat,
-  LogOut,
-  Search,
-  User,
-} from 'lucide-react';
+import { Bell, ChevronDown, HardHat, LogOut, Search, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const PROJECTS = [
@@ -18,9 +11,7 @@ const PROJECTS = [
   { id: 'p3', name: 'Riverside Industrial Park' },
 ];
 
-export const DashboardHeader: React.FC<{ sidebarCollapsed: boolean }> = ({
-  sidebarCollapsed,
-}) => {
+export const DashboardHeader: React.FC<{ sidebarCollapsed: boolean }> = ({ sidebarCollapsed }) => {
   const router = useRouter();
   const [selectedProject, setSelectedProject] = React.useState(PROJECTS[0]);
   const [projectOpen, setProjectOpen] = React.useState(false);
@@ -55,9 +46,7 @@ export const DashboardHeader: React.FC<{ sidebarCollapsed: boolean }> = ({
                 }}
                 className={cn(
                   'w-full text-left px-3 py-2 text-xs hover:bg-slate-800 transition-colors',
-                  p.id === selectedProject.id
-                    ? 'text-orange-400 font-semibold'
-                    : 'text-slate-300'
+                  p.id === selectedProject.id ? 'text-orange-400 font-semibold' : 'text-slate-300'
                 )}
               >
                 {p.name}
@@ -75,7 +64,9 @@ export const DashboardHeader: React.FC<{ sidebarCollapsed: boolean }> = ({
           placeholder="Search projects, workers, documents..."
           className="flex-1 bg-transparent text-xs text-slate-300 placeholder:text-slate-500 focus:outline-none"
         />
-        <kbd className="text-[10px] font-mono text-slate-500 bg-slate-700 px-1.5 py-0.5 rounded-sm">⌘K</kbd>
+        <kbd className="text-[10px] font-mono text-slate-500 bg-slate-700 px-1.5 py-0.5 rounded-sm">
+          ⌘K
+        </kbd>
       </div>
 
       <div className="ml-auto flex items-center gap-2">

@@ -3,16 +3,7 @@
 import type { Metadata } from 'next';
 import * as React from 'react';
 import dynamic from 'next/dynamic';
-import {
-  Cpu,
-  BarChart2,
-  CheckSquare,
-  Clock,
-  Layers,
-  Maximize2,
-  Info,
-  X,
-} from 'lucide-react';
+import { Cpu, BarChart2, CheckSquare, Clock, Layers, Maximize2, Info, X } from 'lucide-react';
 import type { SpatialAnnotation } from '@sitebrain/types';
 import { CameraToolbar } from '@/components/digital-twin/CameraToolbar';
 import { LayerControlPanel } from '@/components/digital-twin/LayerControlPanel';
@@ -25,10 +16,10 @@ import type {
 } from '@/components/digital-twin/DigitalTwinCanvas';
 
 // Dynamically load the Three.js canvas — no SSR
-const DigitalTwinCanvas = dynamic(
-  () => import('@/components/digital-twin/DigitalTwinCanvas'),
-  { ssr: false, loading: () => <CanvasLoadingSkeleton /> }
-);
+const DigitalTwinCanvas = dynamic(() => import('@/components/digital-twin/DigitalTwinCanvas'), {
+  ssr: false,
+  loading: () => <CanvasLoadingSkeleton />,
+});
 
 // ─── Loading Skeleton ─────────────────────────────────────────
 function CanvasLoadingSkeleton() {
@@ -50,10 +41,30 @@ function CanvasLoadingSkeleton() {
 
 // ─── KPI Stats ─────────────────────────────────────────────────
 const MODEL_KPIS = [
-  { label: 'Total Elements', value: '284',  sub: 'BIM-REV-12',             icon: <Layers className="h-4 w-4 text-slate-400" />     },
-  { label: 'Completed',      value: '184',  sub: '64.8% of structure',     icon: <CheckSquare className="h-4 w-4 text-emerald-500" /> },
-  { label: 'In Progress',    value: '48',   sub: 'Lvl 12 – 14 active',     icon: <Clock className="h-4 w-4 text-orange-500" />     },
-  { label: 'Progress Score', value: '67%',  sub: '+3% vs. last week',      icon: <BarChart2 className="h-4 w-4 text-blue-400" />   },
+  {
+    label: 'Total Elements',
+    value: '284',
+    sub: 'BIM-REV-12',
+    icon: <Layers className="h-4 w-4 text-slate-400" />,
+  },
+  {
+    label: 'Completed',
+    value: '184',
+    sub: '64.8% of structure',
+    icon: <CheckSquare className="h-4 w-4 text-emerald-500" />,
+  },
+  {
+    label: 'In Progress',
+    value: '48',
+    sub: 'Lvl 12 – 14 active',
+    icon: <Clock className="h-4 w-4 text-orange-500" />,
+  },
+  {
+    label: 'Progress Score',
+    value: '67%',
+    sub: '+3% vs. last week',
+    icon: <BarChart2 className="h-4 w-4 text-blue-400" />,
+  },
 ];
 
 // ─── Main Page Component ────────────────────────────────────────
@@ -67,8 +78,13 @@ export default function DigitalTwinPage() {
     annotations: true,
   });
   const [annotations, setAnnotations] = React.useState<SpatialAnnotation[]>([]);
-  const [selectedAnnotation, setSelectedAnnotation] = React.useState<SpatialAnnotation | null>(null);
-  const [selectedElement, setSelectedElement] = React.useState<{ id: string; label: string } | null>(null);
+  const [selectedAnnotation, setSelectedAnnotation] = React.useState<SpatialAnnotation | null>(
+    null
+  );
+  const [selectedElement, setSelectedElement] = React.useState<{
+    id: string;
+    label: string;
+  } | null>(null);
   const [showLayers, setShowLayers] = React.useState(false);
   const [showLegend, setShowLegend] = React.useState(true);
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
@@ -112,13 +128,17 @@ export default function DigitalTwinPage() {
   };
 
   return (
-    <div className={`flex flex-col ${fullscreen ? 'fixed inset-0 z-50 bg-slate-950' : 'h-[calc(100vh-48px-48px)]'}`}>
+    <div
+      className={`flex flex-col ${fullscreen ? 'fixed inset-0 z-50 bg-slate-950' : 'h-[calc(100vh-48px-48px)]'}`}
+    >
       {/* ── Top Bar ─────────────────────────────────────────── */}
       <div className="flex items-center justify-between px-4 h-12 bg-slate-900 border-b border-slate-800 shrink-0">
         {/* Left: Model info */}
         <div className="flex items-center gap-3">
           <div>
-            <h1 className="text-xs font-bold text-white leading-tight">Digital Twin — Structural Model</h1>
+            <h1 className="text-xs font-bold text-white leading-tight">
+              Digital Twin — Structural Model
+            </h1>
             <p className="text-[10px] font-mono text-slate-500 leading-tight">
               Harbor City Tower · Block C · BIM-REV-12 · Three.js WebGL
             </p>
@@ -161,7 +181,9 @@ export default function DigitalTwinPage() {
           <div key={kpi.label} className="flex items-center gap-2 shrink-0">
             {kpi.icon}
             <div>
-              <p className="text-sm font-bold font-mono text-slate-100 leading-tight">{kpi.value}</p>
+              <p className="text-sm font-bold font-mono text-slate-100 leading-tight">
+                {kpi.value}
+              </p>
               <p className="text-[10px] font-mono text-slate-500 leading-tight">{kpi.label}</p>
             </div>
             <p className="text-[10px] text-slate-600 font-mono hidden lg:block">· {kpi.sub}</p>
@@ -196,7 +218,9 @@ export default function DigitalTwinPage() {
               >
                 <Layers className="h-3.5 w-3.5" />
                 <span>Layers</span>
-                <span className={`w-1.5 h-1.5 rounded-full ml-0.5 ${Object.values(layers).every(Boolean) ? 'bg-emerald-500' : 'bg-amber-500'}`} />
+                <span
+                  className={`w-1.5 h-1.5 rounded-full ml-0.5 ${Object.values(layers).every(Boolean) ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                />
               </button>
               {showLayers && (
                 <div className="absolute top-full mt-1 left-0 z-20">
@@ -220,7 +244,10 @@ export default function DigitalTwinPage() {
                 <p className="text-xs font-semibold text-slate-100">{selectedElement.label}</p>
                 <p className="text-[10px] font-mono text-slate-400">{selectedElement.id}</p>
               </div>
-              <button onClick={dismissElement} className="text-slate-500 hover:text-slate-300 transition-colors">
+              <button
+                onClick={dismissElement}
+                className="text-slate-500 hover:text-slate-300 transition-colors"
+              >
                 <X className="h-4 w-4" />
               </button>
             </div>

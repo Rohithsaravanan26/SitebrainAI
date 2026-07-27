@@ -1,20 +1,15 @@
 import type { Metadata } from 'next';
-import {
-  FolderKanban,
-  Users,
-  AlertTriangle,
-  DollarSign,
-} from 'lucide-react';
-import { ProjectsWidget }       from '@/components/dashboard/widgets/ProjectsWidget';
-import { WorkersWidget }        from '@/components/dashboard/widgets/WorkersWidget';
-import { InventoryWidget }      from '@/components/dashboard/widgets/InventoryWidget';
-import { ProgressWidget }       from '@/components/dashboard/widgets/ProgressWidget';
-import { EquipmentWidget }      from '@/components/dashboard/widgets/EquipmentWidget';
-import { WeatherWidget }        from '@/components/dashboard/widgets/WeatherWidget';
-import { AiInsightsWidget }     from '@/components/dashboard/widgets/AiInsightsWidget';
-import { NotificationsWidget }  from '@/components/dashboard/widgets/NotificationsWidget';
-import { RecentUploadsWidget }  from '@/components/dashboard/widgets/RecentUploadsWidget';
-import { TrendIndicator }       from '@/components/dashboard/shared/TrendIndicator';
+import { FolderKanban, Users, AlertTriangle, DollarSign } from 'lucide-react';
+import { ProjectsWidget } from '@/components/dashboard/widgets/ProjectsWidget';
+import { WorkersWidget } from '@/components/dashboard/widgets/WorkersWidget';
+import { InventoryWidget } from '@/components/dashboard/widgets/InventoryWidget';
+import { ProgressWidget } from '@/components/dashboard/widgets/ProgressWidget';
+import { EquipmentWidget } from '@/components/dashboard/widgets/EquipmentWidget';
+import { WeatherWidget } from '@/components/dashboard/widgets/WeatherWidget';
+import { AiInsightsWidget } from '@/components/dashboard/widgets/AiInsightsWidget';
+import { NotificationsWidget } from '@/components/dashboard/widgets/NotificationsWidget';
+import { RecentUploadsWidget } from '@/components/dashboard/widgets/RecentUploadsWidget';
+import { TrendIndicator } from '@/components/dashboard/shared/TrendIndicator';
 
 export const metadata: Metadata = {
   title: 'Dashboard — SiteBrain AI',

@@ -32,16 +32,16 @@ export const WidgetShell: React.FC<WidgetShellProps> = ({
             {title}
           </h3>
           {subtitle && (
-            <p className="text-[11px] text-slate-400 dark:text-slate-500 font-mono mt-0.5">{subtitle}</p>
+            <p className="text-[11px] text-slate-400 dark:text-slate-500 font-mono mt-0.5">
+              {subtitle}
+            </p>
           )}
         </div>
         {action && <div className="ml-auto pl-4 shrink-0">{action}</div>}
       </div>
 
       {/* Widget Content */}
-      <div className={cn('flex-1 min-h-0', !noPadding && 'p-4')}>
-        {children}
-      </div>
+      <div className={cn('flex-1 min-h-0', !noPadding && 'p-4')}>{children}</div>
     </div>
   );
 };

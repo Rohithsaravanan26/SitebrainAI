@@ -48,6 +48,61 @@ export interface VerifyEmailRequest {
 }
 
 // -------------------------------------------------------------
+// PROJECTS, RFIS & DOCUMENTS TYPES & CONTRACTS
+// -------------------------------------------------------------
+export type ProjectStatus = 'PLANNING' | 'ACTIVE' | 'ON_HOLD' | 'COMPLETED';
+export type RfiStatus = 'OPEN' | 'IN_REVIEW' | 'ANSWERED' | 'CLOSED';
+export type RfiPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
+
+export interface Project {
+  id: string;
+  code: string;
+  name: string;
+  description?: string;
+  location: string;
+  status: ProjectStatus;
+  startDate: string;
+  endDate: string;
+  budget: number;
+  projectManagerId?: string;
+  projectManagerName?: string;
+  progressPercent: number;
+  openRfiCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RFI {
+  id: string;
+  projectId: string;
+  rfiNumber: string;
+  title: string;
+  question: string;
+  answer?: string;
+  status: RfiStatus;
+  priority: RfiPriority;
+  authorId?: string;
+  authorName?: string;
+  assignedToId?: string;
+  assignedToName?: string;
+  dueDate: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectDocument {
+  id: string;
+  projectId: string;
+  title: string;
+  filePath: string;
+  fileType: string;
+  fileSizeBytes: number;
+  uploadedById?: string;
+  uploadedByName?: string;
+  createdAt: string;
+}
+
+// -------------------------------------------------------------
 // INVENTORY TYPES & CONTRACTS
 // -------------------------------------------------------------
 export type MovementType = 'INCOMING' | 'OUTGOING' | 'ADJUSTMENT' | 'RETURN';

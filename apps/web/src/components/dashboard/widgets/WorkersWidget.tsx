@@ -11,12 +11,12 @@ interface TradeBreakdown {
 }
 
 const TRADES: TradeBreakdown[] = [
-  { trade: 'Steel Fixers',   onSite: 24, total: 24, supervisor: 'D. Kowalski' },
-  { trade: 'Concreters',     onSite: 18, total: 20, supervisor: 'B. Nkosi'    },
-  { trade: 'Carpenters',     onSite: 14, total: 16, supervisor: 'W. Torres'   },
-  { trade: 'Electricians',   onSite:  8, total: 10, supervisor: 'J. Park'     },
-  { trade: 'Plumbers',       onSite:  6, total:  8, supervisor: 'A. Patel'    },
-  { trade: 'Crane Operators',onSite:  4, total:  4, supervisor: 'M. Collins'  },
+  { trade: 'Steel Fixers', onSite: 24, total: 24, supervisor: 'D. Kowalski' },
+  { trade: 'Concreters', onSite: 18, total: 20, supervisor: 'B. Nkosi' },
+  { trade: 'Carpenters', onSite: 14, total: 16, supervisor: 'W. Torres' },
+  { trade: 'Electricians', onSite: 8, total: 10, supervisor: 'J. Park' },
+  { trade: 'Plumbers', onSite: 6, total: 8, supervisor: 'A. Patel' },
+  { trade: 'Crane Operators', onSite: 4, total: 4, supervisor: 'M. Collins' },
 ];
 
 const totalOnSite = TRADES.reduce((s, t) => s + t.onSite, 0);
@@ -55,10 +55,15 @@ export const WorkersWidget: React.FC = () => {
           const attendance = Math.round((trade.onSite / trade.total) * 100);
           const isFullAttendance = trade.onSite === trade.total;
           return (
-            <div key={trade.trade} className="flex items-center px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+            <div
+              key={trade.trade}
+              className="flex items-center px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
+            >
               <div className="flex items-center gap-2 w-36 shrink-0">
                 <HardHat className="h-3.5 w-3.5 text-slate-400 shrink-0" />
-                <span className="text-xs text-slate-800 dark:text-slate-200 font-medium truncate">{trade.trade}</span>
+                <span className="text-xs text-slate-800 dark:text-slate-200 font-medium truncate">
+                  {trade.trade}
+                </span>
               </div>
               <div className="flex-1 mx-3 hidden sm:block">
                 <div className="h-1 bg-slate-200 dark:bg-slate-700 rounded-sm overflow-hidden">

@@ -20,8 +20,7 @@ function DeterministicQr({ data, size = 200 }: { data: string; size?: number }) 
 
   // Fixed finder patterns for authentic QR appearance
   const isFinderPattern = (r: number, c: number) => {
-    const inBlock = (ro: number, co: number) =>
-      r >= ro && r <= ro + 6 && c >= co && c <= co + 6;
+    const inBlock = (ro: number, co: number) => r >= ro && r <= ro + 6 && c >= co && c <= co + 6;
     return inBlock(0, 0) || inBlock(0, MODULES - 7) || inBlock(MODULES - 7, 0);
   };
   const isFinderCore = (r: number, c: number) => {
@@ -94,7 +93,9 @@ export const QrCodeModal: React.FC<QrCodeModalProps> = ({ item, onClose }) => {
           <div className="flex flex-col items-center gap-4 bg-white p-4 border-2 border-slate-200 dark:border-slate-700 rounded-sm">
             {/* Company Header */}
             <div className="w-full text-center border-b border-slate-200 pb-3 mb-1">
-              <p className="text-xs font-bold uppercase tracking-widest text-slate-700">SiteBrain AI</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-slate-700">
+                SiteBrain AI
+              </p>
               <p className="text-[10px] font-mono text-slate-400">Harbor City Tower — Block C</p>
             </div>
 
@@ -104,14 +105,20 @@ export const QrCodeModal: React.FC<QrCodeModalProps> = ({ item, onClose }) => {
             {/* Item Info */}
             <div className="w-full text-center space-y-0.5 pt-2 border-t border-slate-200">
               <p className="text-sm font-bold text-slate-900 leading-tight">{item.name}</p>
-              <p className="text-xs font-mono font-bold text-orange-700 tracking-wider">{item.sku}</p>
-              <p className="text-[10px] font-mono text-slate-500">{item.category} · {item.unit}</p>
+              <p className="text-xs font-mono font-bold text-orange-700 tracking-wider">
+                {item.sku}
+              </p>
+              <p className="text-[10px] font-mono text-slate-500">
+                {item.category} · {item.unit}
+              </p>
               <p className="text-[10px] font-mono text-slate-400">{item.storageLocation}</p>
             </div>
 
             {/* QR Data String */}
             <div className="w-full bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-sm px-3 py-2 text-center">
-              <p className="text-[9px] font-mono text-slate-500 break-all leading-relaxed">{item.qrCodeData}</p>
+              <p className="text-[9px] font-mono text-slate-500 break-all leading-relaxed">
+                {item.qrCodeData}
+              </p>
             </div>
           </div>
         </div>

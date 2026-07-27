@@ -6,11 +6,7 @@ import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar';
 import { DashboardHeader } from '@/components/dashboard/DashboardHeader';
 import { cn } from '@/lib/utils';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
@@ -48,9 +44,7 @@ export default function DashboardLayout({
 
         {/* Page Content — scrollable */}
         <main className="flex-1 overflow-y-auto pt-12">
-          <div className="p-4 lg:p-6">
-            {children}
-          </div>
+          <div className="p-4 lg:p-6">{children}</div>
         </main>
       </div>
     </div>

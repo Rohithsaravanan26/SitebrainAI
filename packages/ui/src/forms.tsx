@@ -7,18 +7,19 @@ function cn(...inputs: ClassValue[]) {
 }
 
 // Label Component
-export const Label = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
-  ({ className, ...props }, ref) => (
-    <label
-      ref={ref}
-      className={cn(
-        'text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-        className
-      )}
-      {...props}
-    />
-  )
-);
+export const Label = React.forwardRef<
+  HTMLLabelElement,
+  React.LabelHTMLAttributes<HTMLLabelElement>
+>(({ className, ...props }, ref) => (
+  <label
+    ref={ref}
+    className={cn(
+      'text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+      className
+    )}
+    {...props}
+  />
+));
 Label.displayName = 'Label';
 
 // Input Component
@@ -94,30 +95,36 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
 Select.displayName = 'Select';
 
 // Checkbox Component
-export const Checkbox = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
-  ({ className, ...props }, ref) => (
-    <input
-      type="checkbox"
-      ref={ref}
-      className={cn(
-        'h-4 w-4 rounded-sm border border-slate-300 dark:border-slate-700 text-orange-600 focus:ring-orange-500 dark:bg-slate-900 accent-orange-600 cursor-pointer',
-        className
-      )}
-      {...props}
-    />
-  )
-);
+export const Checkbox = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>(({ className, ...props }, ref) => (
+  <input
+    type="checkbox"
+    ref={ref}
+    className={cn(
+      'h-4 w-4 rounded-sm border border-slate-300 dark:border-slate-700 text-orange-600 focus:ring-orange-500 dark:bg-slate-900 accent-orange-600 cursor-pointer',
+      className
+    )}
+    {...props}
+  />
+));
 Checkbox.displayName = 'Checkbox';
 
 // Form Item Wrapper
-export const FormItem: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ className, ...props }) => (
-  <div className={cn('space-y-1.5', className)} {...props} />
-);
+export const FormItem: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({
+  className,
+  ...props
+}) => <div className={cn('space-y-1.5', className)} {...props} />;
 
-export const FormHelperText: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({ className, ...props }) => (
-  <p className={cn('text-xs text-slate-500 dark:text-slate-400', className)} {...props} />
-);
+export const FormHelperText: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({
+  className,
+  ...props
+}) => <p className={cn('text-xs text-slate-500 dark:text-slate-400', className)} {...props} />;
 
-export const FormErrorMessage: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({ className, ...props }) => (
+export const FormErrorMessage: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = ({
+  className,
+  ...props
+}) => (
   <p className={cn('text-xs font-medium text-red-600 dark:text-red-400', className)} {...props} />
 );
