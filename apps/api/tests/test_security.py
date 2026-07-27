@@ -1,3 +1,4 @@
+from datetime import timedelta
 from app.core.security import (
     verify_password,
     get_password_hash,
@@ -30,3 +31,7 @@ def test_jwt_refresh_token():
     assert payload is not None
     assert payload.get("sub") == user_id
     assert payload.get("type") == "refresh"
+
+def test_invalid_token_decoding():
+    assert decode_token("invalid.jwt.token") is None
+    assert decode_token("") is None
